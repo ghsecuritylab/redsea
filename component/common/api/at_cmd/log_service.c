@@ -146,7 +146,7 @@ void log_service_init(void)
 #if CONFIG_LOG_SERVICE_LOCK
 	log_service_lock_init();
 #endif
-	start_log_service();
+	//start_log_service();
 }
 
 //sizeof(log_items)/sizeof(log_items[0])
@@ -382,9 +382,9 @@ void log_service_lock_init(void){
 void log_service(void *param)
 {
 //	_AT_DBG_MSG(AT_FLAG_COMMON, AT_DBG_ALWAYS, "\n\rStart LOG SERVICE MODE\n\r");
-	_AT_DBG_MSG(AT_FLAG_COMMON, AT_DBG_ALWAYS, "\n\r# ");        
-	while(1){
-		while(xSemaphoreTake(log_rx_interrupt_sema, portMAX_DELAY) != pdTRUE);
+//	_AT_DBG_MSG(AT_FLAG_COMMON, AT_DBG_ALWAYS, "\n\r# ");        
+//	while(1){
+//		while(xSemaphoreTake(log_rx_interrupt_sema, portMAX_DELAY) != pdTRUE);
 #if CONFIG_LOG_SERVICE_LOCK
 		log_service_lock();
 #endif
@@ -421,9 +421,10 @@ void log_service(void *param)
 #if defined(configUSE_WAKELOCK_PMU) && (configUSE_WAKELOCK_PMU == 1)
 		pmu_release_wakelock(BIT(PMU_LOGUART_DEVICE));
 #endif
-	}
+//	}
 }
 
+#if 0
 #define STACKSIZE               1280
 void start_log_service(void)
 {
@@ -463,6 +464,7 @@ void start_log_service(void)
 	}
 
 }
+#endif
 
 void fAT_exit(void *arg){
 	printf("\n\rLeave LOG SERVICE");

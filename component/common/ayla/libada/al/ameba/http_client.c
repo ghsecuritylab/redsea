@@ -1272,7 +1272,7 @@ static void http_client_connect(struct http_client *hc)
 	http_client_init_ssltcp_metric(hc);
 
 #if 1//add by will
-    int count=5;
+    int count=2;
     while(count--)
     {
     	pcb = stream_new(hc->ssl_enable ? &hc->sess_id : NULL,
@@ -1282,8 +1282,7 @@ static void http_client_connect(struct http_client *hc)
     	if (!pcb) {
     		HTTP_CLIENT_LOGF(hc, LOG_WARN, "cannot alloc PCB");
     		http_client_retry(hc);
-            vTaskDelay(100);
-            HTTP_CLIENT_LOGF(hc, LOG_WARN, "retry %d times", 5 - count);
+            vTaskDelay(10);
     	}
         else
             break;

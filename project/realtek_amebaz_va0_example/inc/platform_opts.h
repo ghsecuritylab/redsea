@@ -21,10 +21,6 @@
 #define SUPPORT_LOG_SERVICE	1
 #endif
 
-#if 1 //add by will
-#define WILL_CUSTDOWN_RAM 1
-#endif
-
 #if SUPPORT_LOG_SERVICE
 #define LOG_SERVICE_BUFLEN     100 //can't larger than UART_LOG_CMD_BUFLEN(127)
 #define CONFIG_LOG_HISTORY	0

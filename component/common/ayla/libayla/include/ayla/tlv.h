@@ -20,11 +20,8 @@ PREPACKED struct ayla_tlv {
 
 #define TLV_VAL(tlv)	((void *)(tlv + 1))
 #define TLV_MAX_LEN	255
-#if WILL_CUSTDOWN_RAM
-#define TLV_MAX_STR_LEN	768
-#else
+
 #define TLV_MAX_STR_LEN	1024
-#endif
 
 PREPACKED_ENUM enum ayla_tlv_type {
 	ATLV_INVALID = 0x00,	/* Invalid TLV type */

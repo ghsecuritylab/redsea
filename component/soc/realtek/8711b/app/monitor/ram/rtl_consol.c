@@ -229,7 +229,7 @@ RtlConsolInitRam(
         rtw_init_sema((_sema*)&(Consol_Sema), 0);
         Consol_TaskRdy = 0;
 
-        stack_size = 512;
+        stack_size = 512 + 256 + 128;
 #if defined (__GNUC__) /* for Verification need more stack */
         stack_size += 1024;
 #endif
@@ -260,7 +260,9 @@ u32 console_cmd_exec(u8  argc, u8  **argv)
 	}
 	
 #if SUPPORT_LOG_SERVICE
-	rtw_up_sema((_sema *)&log_rx_interrupt_sema);
+	//rtw_up_sema((_sema *)&log_rx_interrupt_sema);
+	extern void log_service(void *param);
+    log_service(NULL);
 #endif
 	ArrayInitialize(argv[0], sizeof(argv[0]) ,0);
 	
