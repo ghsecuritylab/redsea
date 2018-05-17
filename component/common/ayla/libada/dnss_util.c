@@ -57,10 +57,10 @@ u16 dnss_device_name(char *arg, u16 len)
 
 ret_name:
 	if (dnss_state.mdns_hname_suf) {
-		rc = snprintf(arg, len, "%s-%d.local.",
+		rc = rtl_snprintf(arg, len, "%s-%d.local.",
 		    name, dnss_state.mdns_hname_suf);
 	} else {
-		rc = snprintf(arg, len, "%s.local.", name);
+		rc = rtl_snprintf(arg, len, "%s.local.", name);
 	}
 	return rc;
 }
@@ -89,10 +89,10 @@ u16 dnss_service_name(char *arg, u16 len, const char *srv_name)
 
 ret_name:
 	if (dnss_state.mdns_sname_suf) {
-		rc = snprintf(arg, len, "%s-%d.%s", name,
+		rc = rtl_snprintf(arg, len, "%s-%d.%s", name,
 		    dnss_state.mdns_sname_suf, srv_name);
 	} else {
-		rc = snprintf(arg, len, "%s.%s", name, srv_name);
+		rc = rtl_snprintf(arg, len, "%s.%s", name, srv_name);
 	}
 	return rc;
 }

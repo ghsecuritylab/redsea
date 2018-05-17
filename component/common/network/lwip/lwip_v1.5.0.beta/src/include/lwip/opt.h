@@ -1208,7 +1208,7 @@
  * field.
  */
 #ifndef LWIP_NETIF_HOSTNAME
-#define LWIP_NETIF_HOSTNAME             1
+#define LWIP_NETIF_HOSTNAME             0
 #endif
 
 /**

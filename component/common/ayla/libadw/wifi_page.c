@@ -83,7 +83,7 @@ void adw_wifi_page_success(struct server_req *req)
 {
 	char hdr_msg[120];
 
-	snprintf(hdr_msg, sizeof(hdr_msg), "%s\r\n",
+	rtl_snprintf(hdr_msg, sizeof(hdr_msg), "%s\r\n",
 	    adw_http_content_type_html);
 	net_addr_set_zero(adw_wifi_iphone_is_v6, &adw_wifi_iphone_ip);
 	req->put_head(req, HTTP_STATUS_OK, hdr_msg);
@@ -198,7 +198,7 @@ static void adw_wifi_page_redir(struct server_req *req)
 
 	server_log(LOG_DEBUG "redir %s", url);
 
-	snprintf(hdr_msg, sizeof(hdr_msg), "Location: http://%s%s\r\n"
+	rtl_snprintf(hdr_msg, sizeof(hdr_msg), "Location: http://%s%s\r\n"
 	    "%s\r\n", redir_host, url, adw_http_content_type_html);
 
 	req->put_head(req, HTTP_STATUS_FOUND, hdr_msg);
@@ -378,7 +378,7 @@ void adw_wifi_http_ios_get(struct server_req *req)
 	net_tcp_remote_ip_copy(req->pcb, adw_wifi_iphone_ip,
 	     &adw_wifi_iphone_is_v6);
 
-	snprintf(hdr_msg, sizeof(hdr_msg), "%s; charset=UTF-8\r\n",
+	rtl_snprintf(hdr_msg, sizeof(hdr_msg), "%s; charset=UTF-8\r\n",
 	    adw_http_content_type_html);
 
 	req->put_head(req, HTTP_STATUS_OK, hdr_msg);
@@ -546,7 +546,7 @@ adw_wifi_add_prof(struct adw_state *wifi, const struct adw_ssid *ssid,
 		}
 #endif
 	} else if (key_len < WIFI_MIN_KEY_LEN) {
-		snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
+		rtl_snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
 		    "Key too short.  %d characters or more required.",
 		    WIFI_MIN_KEY_LEN);
 		return WIFI_ERR_INV_KEY;
@@ -784,7 +784,7 @@ static char *adw_format_ip(ip_addr_t *ip, char *buf, size_t len)
 {
 	u8 *bp = (u8 *)ip;
 
-	len = snprintf(buf, len - 1, "%u.%u.%u.%u", bp[0], bp[1], bp[2], bp[3]);
+	len = rtl_snprintf(buf, len - 1, "%u.%u.%u.%u", bp[0], bp[1], bp[2], bp[3]);
 	buf[len] = '\0';
 	return buf;
 }
@@ -963,6 +963,7 @@ static void adw_wifi_json_connect_post(struct server_req *req)
 	struct adw_wifi_scan_wait_connect *wswc;
 	u8 hidden = 0;
 
+
 	wifi->err_msg = wifi->err_buf;
 	client_set_setup_token("");
 
@@ -1009,7 +1010,7 @@ static void adw_wifi_json_connect_post(struct server_req *req)
 		client_set_setup_location(location);
 
 		if (!ssid.len && !bssid_len) {
-			snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
+			rtl_snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
 			    "Missing SSID");
 invalid:
 			server_put_status(req, HTTP_STATUS_BAD_REQ);
@@ -1050,7 +1051,7 @@ invalid:
 			}
 		}
 		adw_log(LOG_DEBUG "not finding it");
-		snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
+		rtl_snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
 		    "%s not found in scan",
 		    adw_format_ssid(&ssid, ssid_buf, sizeof(ssid_buf)));
 		error = WIFI_ERR_NOT_FOUND;
@@ -1067,7 +1068,7 @@ invalid:
 	    sec_token != CT_WEP &&
 #endif
 	    sec_token != CT_WPA && sec_token != CT_WPA2_Personal) {
-		snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
+		rtl_snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
 		    "Unsupported security type \"%s\"",
 		    adw_wmi_sec_string(scan->wmi_sec));
 		error = WIFI_ERR_SEC_UNSUP;
@@ -1075,7 +1076,7 @@ invalid:
 	}
 
 	if (key_len == 0 && sec_token != CT_none) {
-		snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
+		rtl_snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
 		    "Missing key");
 		error = WIFI_ERR_INV_KEY;
 		goto err;

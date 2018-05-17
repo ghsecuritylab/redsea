@@ -50,7 +50,7 @@ int client_auth_encrypt(void *pub_key, size_t pub_key_len,
 	/*
 	 * form pseudo-header in result buffer.
 	 */
-	tlen = snprintf(buf, len, "%lu %s", clock_utc(), req);
+	tlen = rtl_snprintf(buf, len, "%lu %s", clock_utc(), req);
 	if (tlen >= len) {
 		client_log(LOG_ERR "auth: pseudo-header too long");
 		goto free_key;

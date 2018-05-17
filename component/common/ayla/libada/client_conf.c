@@ -328,7 +328,7 @@ static enum conf_error client_conf_set(int src, enum conf_token *token,
 		case CT_private_key:
 			conf_get(tlv, ATLV_UTF8, lanip_key,
 			    sizeof(lanip_key));
-			snprintf(lcf->lanip_key, sizeof(lcf->lanip_key), "%s",
+			rtl_snprintf(lcf->lanip_key, sizeof(lcf->lanip_key), "%s",
 			    lanip_key);
 			return CONF_ERR_NONE;
 		case CT_key:
@@ -556,6 +556,9 @@ static struct mem_file *ada_conf_file_set_curr(const char *name)
 	char *errptr;
 
 	val = strtoul(name, &errptr, 10);
+
+	printcli("name: %s, val: %ld, %d\n",name, val, *errptr);
+
 	if (*errptr != '\0') {
 invalid:
 		printcli("invalid file number");
@@ -596,7 +599,7 @@ void ada_conf_file_cli(int argc, char **argv)
 			file->len = 0;
 		}
 	} else if (!strcmp(argv[1], "add") && file) {
-		file->len += snprintf((char *)file->buf + file->len,
+		file->len += rtl_snprintf((char *)file->buf + file->len,
 		    file->max_len - file->len, "%s", argv[2]);
 	} else if (!strcmp(argv[1], "crc")) {
 		file = ada_conf_file_set_curr(argv[2]);

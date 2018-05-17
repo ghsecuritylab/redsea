@@ -115,7 +115,7 @@ int main(int real_argc, char **real_argv)
 
 	for (test = test_cases; *test; test++) {
 		memset(argv, 0xff, sizeof(argv));
-		snprintf(buf, sizeof(buf), *test);
+		rtl_snprintf(buf, sizeof(buf), *test);
 		printf("buf <%s>\n", buf);
 		argc = parse_argv(argv, ARGV_LEN, buf);
 		dump_argv(argc, argv);

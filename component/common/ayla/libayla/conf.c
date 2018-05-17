@@ -244,13 +244,13 @@ static char *conf_path_format(char *buf, size_t len, int argc,
 	while (argc-- > 0) {
 		tok = *argv++;
 		if (table) {
-			tlen += snprintf(buf + tlen, len - tlen,
+			tlen += rtl_snprintf(buf + tlen, len - tlen,
 				"%u%s", tok, argc ? "/" : "");
 			table = 0;
 			continue;
 		}
 		table = conf_table_follows(tok);
-		tlen += snprintf(buf + tlen, len - tlen, "%s%s",
+		tlen += rtl_snprintf(buf + tlen, len - tlen, "%s%s",
 		    conf_string(tok), argc ? "/" : "");
 	}
 	return buf;
@@ -348,7 +348,7 @@ static void conf_tlv_fmt(char *obuf, size_t len, struct ayla_tlv *tlv)
 		}
 		memcpy(buf, tlv + 1, tlen);
 		buf[tlen] = '\0';
-		snprintf(obuf, len, "\"%s\"", buf);
+		rtl_snprintf(obuf, len, "\"%s\"", buf);
 		break;
 
 	case ATLV_INT:
@@ -358,13 +358,13 @@ static void conf_tlv_fmt(char *obuf, size_t len, struct ayla_tlv *tlv)
 	case ATLV_FORMAT:
 		if (type == ATLV_UINT) {
 			val = conf_get_uint_common(tlv);
-			snprintf(obuf, len, "%lu = 0x%lx", val, val);
+			rtl_snprintf(obuf, len, "%lu = 0x%lx", val, val);
 		} else if (type == ATLV_BOOL) {
 			val = conf_get_uint_common(tlv);
-			snprintf(obuf, len, "%lu", val);
+			rtl_snprintf(obuf, len, "%lu", val);
 		} else {
 			sval = conf_get_int_common(tlv);
-			snprintf(obuf, len, "%ld = 0x%lx", sval, sval);
+			rtl_snprintf(obuf, len, "%ld = 0x%lx", sval, sval);
 		}
 		break;
 
@@ -376,9 +376,9 @@ static void conf_tlv_fmt(char *obuf, size_t len, struct ayla_tlv *tlv)
 	case ATLV_SCHED:
 		slen = 0;
 		vp = (u8 *)(tlv + 1);
-		slen = snprintf(obuf, len, "len %u ", (unsigned int)tlen);
+		slen = rtl_snprintf(obuf, len, "len %u ", (unsigned int)tlen);
 		while (tlen-- > 0 && slen < sizeof(buf)) {
-			slen += snprintf(obuf + slen, len - slen,
+			slen += rtl_snprintf(obuf + slen, len - slen,
 				"%2.2x ", *vp++);
 		}
 		break;
@@ -402,11 +402,11 @@ static void conf_tlv_fmt(char *obuf, size_t len, struct ayla_tlv *tlv)
 		break;
 
 	case ATLV_DELETE:
-		snprintf(obuf, len, "delete");
+		rtl_snprintf(obuf, len, "delete");
 		break;
 
 	default:
-		snprintf(obuf, len, "unknown type %u L %u",
+		rtl_snprintf(obuf, len, "unknown type %u L %u",
 		    tlv->type, (unsigned int)tlen);
 		break;
 	}
@@ -2316,7 +2316,7 @@ static int conf_show_flash_var(enum conf_inode inode, size_t len,
 			type = "UNK";
 		}
 		if (CONF_SHOW_ALL) {
-			snprintf(off_buf, sizeof(off_buf), "%4x %s", tlv_off,
+			rtl_snprintf(off_buf, sizeof(off_buf), "%4x %s", tlv_off,
 			    type);
 			type = off_buf;
 		}

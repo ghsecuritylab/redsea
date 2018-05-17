@@ -59,7 +59,7 @@ int adap_conf_set(const char *path, const void *val, size_t len)
 	} buf;
 	const void *valp;
 
-	snprintf(name, sizeof(name), "%s", path);
+	rtl_snprintf(name, sizeof(name), "%s", path);
 	tok_len = conf_str_to_tokens(name, tk, ARRAY_LEN(tk));
 	if (tok_len <= 0) {
 		return tok_len;

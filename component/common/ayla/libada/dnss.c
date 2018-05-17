@@ -545,7 +545,7 @@ static int dns_cb_disc_qry(struct dnss_req_state *rstate,
 	struct dns_head *hdr;
 	char hostname[DNSS_QNAME_LEN];
 
-	snprintf(hostname, sizeof(hostname), "%s.local.", conf_sys_dev_id);
+	rtl_snprintf(hostname, sizeof(hostname), "%s.local.", conf_sys_dev_id);
 
 	qry = DNS_Q_HDR(req, elem->off);
 	if (get_ua_be16(&qry->type) == DNS_RRTYPE_A &&

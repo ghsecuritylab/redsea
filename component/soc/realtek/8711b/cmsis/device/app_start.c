@@ -43,6 +43,26 @@ void APP_StartMbed(void)
 }
 #endif
 
+//add by herry
+unsigned long my_strtoul(const char *str, char **endp, unsigned int base)
+{
+    unsigned long   ret;
+    ret = simple_strtoul(str, endp, base); 
+    *endp = (char *)str + strlen(str);
+    
+    return ret;
+}
+
+long my_strtol(const char *str, char **endp, unsigned int base)
+{
+    long   ret;
+    
+    ret = simple_strtol(str, endp, base); 
+    *endp = (char *)str + strlen(str);
+    
+    return ret;
+}
+
 void APP_InitTrace(void)
 {
 	u32 debug[4];
@@ -84,46 +104,50 @@ _WEAK void main(void)
 	Simulation_Init();
 #endif
 
-	APP_InitTrace();
+	// APP_InitTrace();
 	
 	PMAP_Init();
 
-#ifndef CONFIG_WITHOUT_MONITOR
-	ReRegisterPlatformLogUart();
-#endif
+// #ifndef CONFIG_WITHOUT_MONITOR
+// 	ReRegisterPlatformLogUart();
+// #endif
 
-#ifdef CONFIG_USB_DONGLE_NIC_EN
-	if(xTaskCreate(USOC_Dongle_InitThread, ((const char*)"usb_dongle"), 1024, NULL, tskIDLE_PRIORITY + 3 + PRIORITIE_OFFSET, NULL) != pdPASS)
-		DBG_8195A("\n\r%s xTaskCreate(usb_dongle_thread) failed", __FUNCTION__);
-	goto end;
-#endif
+DBG_8195A("\n\r[cs] %s %d available heap %d\n\r", __func__, __LINE__, xPortGetFreeHeapSize());
 
-#if defined(CONFIG_WIFI_NORMAL) && defined(CONFIG_NETWORK)
-#if (!defined(CONFIG_POST_SIM) && !defined(CONFIG_RTL_SIM) && !defined(CONFIG_FT) && !defined(CONFIG_CP))
-	wlan_network();
-#endif
-#else
+// #ifdef CONFIG_USB_DONGLE_NIC_EN
+// 	if(xTaskCreate(USOC_Dongle_InitThread, ((const char*)"usb_dongle"), 1024, NULL, tskIDLE_PRIORITY + 3 + PRIORITIE_OFFSET, NULL) != pdPASS)
+// 		DBG_8195A("\n\r%s xTaskCreate(usb_dongle_thread) failed", __FUNCTION__);
+// 	goto end;
+// #endif
 
-#endif  // end of else of "#if defined(CONFIG_WIFI_NORMAL) && defined(CONFIG_NETWORK)"
+// #if defined(CONFIG_WIFI_NORMAL) && defined(CONFIG_NETWORK)
+// #if (!defined(CONFIG_POST_SIM) && !defined(CONFIG_RTL_SIM) && !defined(CONFIG_FT) && !defined(CONFIG_CP))
+ 	wlan_network();
+// #endif
+// #else
+ 	DBG_8195A("\n\r[cs] %s %d available heap %d\n\r", __func__, __LINE__, xPortGetFreeHeapSize());
+// #endif  // end of else of "#if defined(CONFIG_WIFI_NORMAL) && defined(CONFIG_NETWORK)"
 
-#if CONFIG_INIC_EN
-#if SUPPORT_LOG_SERVICE
+// #if CONFIG_INIC_EN
+// #if SUPPORT_LOG_SERVICE
 	
-	log_service_init();
-#endif
+// 	log_service_init();
+// #endif
 
-	inic_interface_init();
-#endif
+//inic_interface_init();
+// #endif
+
+
 
 end:
 	//3 4)Enable Schedule
-#if defined(CONFIG_KERNEL) && !TASK_SCHEDULER_DISABLED
-#ifdef PLATFORM_FREERTOS
+// #if defined(CONFIG_KERNEL) && !TASK_SCHEDULER_DISABLED
+// #ifdef PLATFORM_FREERTOS
 	vTaskStartScheduler();
-#endif
-#else
-	RtlConsolTaskRom(NULL);
-#endif
+// #endif
+// #else
+// 	RtlConsolTaskRom(NULL);
+// #endif
 }
 
 // The Main App entry point

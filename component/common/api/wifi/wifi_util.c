@@ -249,7 +249,7 @@ int wext_set_mac_address(const char *ifname, char * mac)
 {
 	char buf[13+17+1];
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 13+17, "write_mac %s", mac);
+	rtl_snprintf(buf, 13+17, "write_mac %s", mac);
 	return wext_private_command(ifname, buf, 0);
 }
 
@@ -281,7 +281,7 @@ int wext_enable_powersave(const char *ifname, __u8 ips_mode, __u8 lps_mode)
 	para = pvPortMalloc( 7 + (1+1+1) + (1+1+1) );
 	if(para == NULL) return -1;
 
-	snprintf((char*)para, cmd_len, "pm_set");
+	rtl_snprintf((char*)para, cmd_len, "pm_set");
 	pindex = 7;
 
 	para[pindex++] = 0; // type 0 for ips
@@ -319,7 +319,7 @@ int wext_disable_powersave(const char *ifname)
 	para = pvPortMalloc( 7 + (1+1+1) + (1+1+1) );
 	if(para == NULL) return -1;
 
-	snprintf((char*)para, cmd_len, "pm_set");
+	rtl_snprintf((char*)para, cmd_len, "pm_set");
 	pindex = 7;
 
 	para[pindex++] = 0; // type 0 for ips
@@ -357,7 +357,7 @@ int wext_set_tdma_param(const char *ifname, __u8 slot_period, __u8 rfon_period_l
 	// Encode parameters as TLV (type, length, value) format
 	para = pvPortMalloc( 7 + (1+1+4) );
 	
-	snprintf((char*)para, cmd_len, "pm_set");
+	rtl_snprintf((char*)para, cmd_len, "pm_set");
 	pindex = 7;
 
 	para[pindex++] = 2; // type 2 tdma param
@@ -393,7 +393,7 @@ int wext_set_lps_dtim(const char *ifname, __u8 lps_dtim)
 	// Encode parameters as TLV (type, length, value) format
 	para = pvPortMalloc( 7 + (1+1+1) );
 	
-	snprintf((char*)para, cmd_len, "pm_set");
+	rtl_snprintf((char*)para, cmd_len, "pm_set");
 	pindex = 7;
 
 	para[pindex++] = 3; // type 3 lps dtim
@@ -427,7 +427,7 @@ int wext_get_lps_dtim(const char *ifname, __u8 *lps_dtim)
 	// Encode parameters as TLV (type, length, value) format
 	para = pvPortMalloc( 7 + (1+1+1) );
 	
-	snprintf((char*)para, cmd_len, "pm_get");
+	rtl_snprintf((char*)para, cmd_len, "pm_get");
 	pindex = 7;
 
 	para[pindex++] = 3; // type 3 for lps dtim
@@ -465,7 +465,7 @@ int wext_set_tos_value(const char *ifname, __u8 *tos_value)
 	memset(&iwr, 0, sizeof(iwr));
 
 	para = pvPortMalloc(cmd_len + 4);
-	snprintf((char*)para, cmd_len, "set_tos_value");
+	rtl_snprintf((char*)para, cmd_len, "set_tos_value");
 
 	if(*tos_value >= 0 && *tos_value <=32){
 		*(para + cmd_len)   = 0x4f;
@@ -517,7 +517,7 @@ int wext_get_tx_power(const char *ifname, __u8 *poweridx)
 	//OFDM 6M, 9M, 12M, 18M, 24M, 36M 48M, 54M : 8 Bytes
 	//MCS 0~7 : 8 Bytes
 	para = pvPortMalloc(cmd_len + 20);
-	snprintf((char*)para, cmd_len, "get_tx_power");
+	rtl_snprintf((char*)para, cmd_len, "get_tx_power");
 
 	iwr.u.data.pointer = para;
 	iwr.u.data.length = cmd_len + 20;
@@ -538,7 +538,7 @@ int wext_set_txpower(const char *ifname, int poweridx)
 	char buf[24];
 	
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 24, "txpower patha=%d", poweridx);
+	rtl_snprintf(buf, 24, "txpower patha=%d", poweridx);
 	ret = wext_private_command(ifname, buf, 0);
 
 	return ret;
@@ -550,7 +550,7 @@ int wext_get_associated_client_list(const char *ifname, void * client_list_buffe
 	char buf[25];
 
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 25, "get_client_list %x", client_list_buffer);
+	rtl_snprintf(buf, 25, "get_client_list %x", client_list_buffer);
 	ret = wext_private_command(ifname, buf, 0);
 
 	return ret;
@@ -562,10 +562,10 @@ int wext_get_ap_info(const char *ifname, rtw_bss_info_t * ap_info, rtw_security_
 	char buf[24];
 
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 24, "get_ap_info %x", ap_info);
+	rtl_snprintf(buf, 24, "get_ap_info %x", ap_info);
 	ret = wext_private_command(ifname, buf, 0);
 
-	snprintf(buf, 24, "get_security");
+	rtl_snprintf(buf, 24, "get_security");
 	ret = wext_private_command_with_retval(ifname, buf, buf, 24);
 	sscanf(buf, "%d", security);
 
@@ -668,7 +668,7 @@ int wext_set_pscan_channel(const char *ifname, __u8 *ch, __u8 *pscan_config, __u
 	if(para == NULL) return -1;
 
 	//Cmd
-	snprintf((char*)para, 12, "PartialScan");
+	rtl_snprintf((char*)para, 12, "PartialScan");
 	//length
 	*(para+12) = length;
 	for(i = 0; i < length; i++){
@@ -726,7 +726,7 @@ int wext_register_multicast_address(const char *ifname, rtw_mac_t *mac)
 	char buf[32];
 
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 32, "reg_multicast "MAC_FMT, MAC_ARG(mac->octet));
+	rtl_snprintf(buf, 32, "reg_multicast "MAC_FMT, MAC_ARG(mac->octet));
 	ret = wext_private_command(ifname, buf, 0);
 
 	return ret;
@@ -738,7 +738,7 @@ int wext_unregister_multicast_address(const char *ifname, rtw_mac_t *mac)
 	char buf[35];
 
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 35, "reg_multicast -d "MAC_FMT, MAC_ARG(mac->octet));
+	rtl_snprintf(buf, 35, "reg_multicast -d "MAC_FMT, MAC_ARG(mac->octet));
 	ret = wext_private_command(ifname, buf, 0);
 
 	return ret;
@@ -981,7 +981,7 @@ int wext_set_autoreconnect(const char *ifname, __u8 mode, __u8 retry_times, __u1
 	if(para == NULL) return -1;
 
 	//Cmd
-	snprintf((char*)para, cmd_len, "SetAutoRecnt");
+	rtl_snprintf((char*)para, cmd_len, "SetAutoRecnt");
 	//length
 	*(para+cmd_len) = mode;	//para1
 	*(para+cmd_len+1) = retry_times; //para2
@@ -1008,7 +1008,7 @@ int wext_get_autoreconnect(const char *ifname, __u8 *mode)
 	cmd_len = sizeof("GetAutoRecnt");
 	para = pvPortMalloc(cmd_len);//size:para_len+cmd_len
 	//Cmd
-	snprintf((char*)para, cmd_len, "GetAutoRecnt");
+	rtl_snprintf((char*)para, cmd_len, "GetAutoRecnt");
 	//length
 	
 	iwr.u.data.pointer = para;
@@ -1028,7 +1028,7 @@ int wext_get_drv_ability(const char *ifname, __u32 *ability)
 	char * buf = (char *)rtw_zmalloc(33);
 	if(buf == NULL) return -1;
 
-	snprintf(buf, 33, "get_drv_ability %x", ability);
+	rtl_snprintf(buf, 33, "get_drv_ability %x", ability);
 	ret = wext_private_command(ifname, buf, 0);
 
 	rtw_free(buf);
@@ -1053,7 +1053,7 @@ int wext_add_custom_ie(const char *ifname, void *cus_ie, int ie_num)
 	if(para == NULL) return -1;
 
 	//Cmd
-	snprintf(para, cmd_len, "SetCusIE");
+	rtl_snprintf(para, cmd_len, "SetCusIE");
 	//addr length
 	*(__u32 *)(para + cmd_len) = (__u32)cus_ie; //ie addr
 	//ie_num
@@ -1087,7 +1087,7 @@ int wext_update_custom_ie(const char *ifname, void * cus_ie, int ie_index)
 	if(para == NULL) return -1;
 
 	//Cmd
-	snprintf(para, cmd_len, "UpdateIE");
+	rtl_snprintf(para, cmd_len, "UpdateIE");
 	//addr length
 	*(__u32 *)(para + cmd_len) = (__u32)cus_ie; //ie addr
 	//ie_index
@@ -1116,7 +1116,7 @@ int wext_del_custom_ie(const char *ifname)
 	cmd_len = sizeof("DelIE");
 	para = pvPortMalloc(cmd_len);//size:addr len+cmd_len
 	//Cmd
-	snprintf(para, cmd_len, "DelIE");
+	rtl_snprintf(para, cmd_len, "DelIE");
 	
 	iwr.u.data.pointer = para;
 	iwr.u.data.length = cmd_len;
@@ -1147,7 +1147,7 @@ int wext_enable_forwarding(const char *ifname)
 	if(para == NULL) return -1;
 
 	// forwarding_set 1
-	snprintf((char *) para, cmd_len, "forwarding_set");
+	rtl_snprintf((char *) para, cmd_len, "forwarding_set");
 	*(para + cmd_len) = '1';
 
 	iwr.u.essid.pointer = para;
@@ -1175,7 +1175,7 @@ int wext_disable_forwarding(const char *ifname)
 	if(para == NULL) return -1;
 
 	// forwarding_set 0
-	snprintf((char *) para, cmd_len, "forwarding_set");
+	rtl_snprintf((char *) para, cmd_len, "forwarding_set");
 	*(para + cmd_len) = '0';
 
 	iwr.u.essid.pointer = para;
@@ -1199,7 +1199,7 @@ int wext_set_ch_deauth(const char *ifname, __u8 enable)
 	char * buf = (char *)rtw_zmalloc(16);
 	if(buf == NULL) return -1;
 
-	snprintf(buf, 16, "SetChDeauth %d", enable);
+	rtl_snprintf(buf, 16, "SetChDeauth %d", enable);
 	ret = wext_private_command(ifname, buf, 0);
 
 	rtw_free(buf);

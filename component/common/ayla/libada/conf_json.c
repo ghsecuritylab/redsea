@@ -74,9 +74,9 @@ void conf_json_get(struct server_req *req)
 	}
 
 	if (!strcmp(name, "sys/setup_mode")) {
-		snprintf(value, sizeof(value), "%u", conf_setup_mode);
+		rtl_snprintf(value, sizeof(value), "%u", conf_setup_mode);
 	} else if (!strcmp(name, "client/server/default")) {
-		snprintf(value, sizeof(value), "%u", cf->conf_serv_override);
+		rtl_snprintf(value, sizeof(value), "%u", cf->conf_serv_override);
 	} else {
 		server_put_status(req, HTTP_STATUS_NOT_FOUND);
 		return;
@@ -117,7 +117,7 @@ static int conf_json_put_config(jsmn_parser *parser, jsmntok_t *obj, void *arg)
 		if (jsmn_get_long(parser, obj, "val", &lval)) {
 			return -1;
 		}
-		snprintf(val, sizeof(val), "%ld", -lval);
+		rtl_snprintf(val, sizeof(val), "%ld", -lval);
 	}
 	return ada_conf_set(ctx, name, val);
 }

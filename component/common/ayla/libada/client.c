@@ -244,8 +244,9 @@ struct hostname_info {
  */
 static const struct hostname_info server_region_table[] = {
 	{ "US", "aylanetworks.com" },
-	{ "CN", "ayla.com.cn" },
+	{ "CN", "sunseaiot.com" },
 };
+
 /* First hostname table entry is the default */
 static const struct hostname_info *SERVER_HOSTINFO_DEFAULT =
 	server_region_table;
@@ -366,7 +367,7 @@ static int client_cmd_data(struct xml_state *sp, int argc, char **argv)
 		} else {
 			state->cmd.data = state->cmd.res_data;
 		}
-		snprintf(state->cmd.data, sizeof(state->cmd.res_data) -
+		rtl_snprintf(state->cmd.data, sizeof(state->cmd.res_data) -
 		    len - 2, "%s", argv[0]);
 	}
 	return 0;
@@ -382,7 +383,7 @@ static int client_cmd_method(struct xml_state *sp, int argc, char **argv)
 
 	state->cmd.method[0] = '\0';
 	if (argc == 1) {
-		snprintf(state->cmd.method, sizeof(state->cmd.method) - 1,
+		rtl_snprintf(state->cmd.method, sizeof(state->cmd.method) - 1,
 		    "%s", argv[0]);
 	}
 	return 0;
@@ -405,7 +406,7 @@ static int client_cmd_resource(struct xml_state *sp, int argc, char **argv)
 		} else {
 			state->cmd.resource = state->cmd.res_data;
 		}
-		snprintf(state->cmd.resource, sizeof(state->cmd.res_data) -
+		rtl_snprintf(state->cmd.resource, sizeof(state->cmd.res_data) -
 		    len - 2, "/%s", argv[0]);
 	}
 	return 0;
@@ -421,7 +422,7 @@ static int client_cmd_uri(struct xml_state *sp, int argc, char **argv)
 
 	state->cmd.uri[0] = '\0';
 	if (argc == 1) {
-		snprintf(state->cmd.uri, sizeof(state->cmd.uri) - 1, "%s",
+		rtl_snprintf(state->cmd.uri, sizeof(state->cmd.uri) - 1, "%s",
 		    argv[0] + 1);
 	}
 	return 0;
@@ -821,7 +822,7 @@ static int client_log_host(struct xml_state *sp, int argc, char **argv)
 	struct client_state *state = &client_state;
 
 	if (argc == 1) {
-		snprintf(state->log_server.host,
+		rtl_snprintf(state->log_server.host,
 		    sizeof(state->log_server.host) - 1, "%s", argv[0]);
 	}
 	return 0;
@@ -832,7 +833,7 @@ static int client_log_uri(struct xml_state *sp, int argc, char **argv)
 	struct client_state *state = &client_state;
 
 	if (argc == 1) {
-		snprintf(state->log_server.uri,
+		rtl_snprintf(state->log_server.uri,
 		    sizeof(state->log_server.uri) - 1, "%s", argv[0]);
 	}
 	return 0;
@@ -843,7 +844,7 @@ static int client_log_protocol(struct xml_state *sp, int argc, char **argv)
 	struct client_state *state = &client_state;
 
 	if (argc == 1) {
-		snprintf(state->log_server.protocol,
+		rtl_snprintf(state->log_server.protocol,
 		    sizeof(state->log_server.protocol) - 1, "%s", argv[0]);
 	}
 	return 0;
@@ -1386,7 +1387,7 @@ void client_req_start(struct http_client *hc, enum http_method method,
 			 * The pseudo-header for authentication does not
 			 * include the args, unfortunately.  Form psuedo header.
 			 */
-			snprintf(req, sizeof(req), "%s %s?",
+			rtl_snprintf(req, sizeof(req), "%s %s?",
 			    method_str, resource);
 			cp = strchr(req, '?');
 			ASSERT(cp);		/* should find final '?' */
@@ -1394,7 +1395,7 @@ void client_req_start(struct http_client *hc, enum http_method method,
 				*cp = '\0';
 			}
 
-			len = snprintf(buf, sizeof(buf), "%s ",
+			len = rtl_snprintf(buf, sizeof(buf), "%s ",
 			    HTTP_CLIENT_AUTH_VER);
 
 			pub_key_len = adap_conf_pub_key_get(pub_key,
@@ -2103,7 +2104,7 @@ static void client_get_dev_id(void *arg)
 		state->client_info_flags &= ~CLIENT_UPDATE_SETUP;
 	}
 
-	snprintf(req, sizeof(req) - 1, "/dsns/%s.xml", conf_sys_dev_id);
+	rtl_snprintf(req, sizeof(req) - 1, "/dsns/%s.xml", conf_sys_dev_id);
 
 	if (conf_was_reset) {
 		client_arg_add(req, sizeof(req), "reset=1");
@@ -2146,7 +2147,7 @@ static int client_get_lanip_key(struct client_state *state)
 	state->request = CS_GET_LANIP;
 	state->recved_len = 0;
 
-	snprintf(uri, sizeof(uri), "/devices/%s/lan.json", state->client_key);
+	rtl_snprintf(uri, sizeof(uri), "/devices/%s/lan.json", state->client_key);
 	client_req_start(hc, HTTP_REQ_GET, uri, &http_hdr_content_json);
 	return 0;
 }
@@ -2212,7 +2213,7 @@ static void client_get_cmds(struct client_state *state)
 	hc->client_tcp_recv_cb = client_recv_cmds;
 	state->conn_state = CS_WAIT_GET;
 
-	snprintf(state->buf, sizeof(state->buf) - 1,
+	rtl_snprintf(state->buf, sizeof(state->buf) - 1,
 	    "/devices/%s/commands.xml", state->client_key);
 
 	if (state->get_all) {
@@ -2251,7 +2252,7 @@ static int client_convert_loc_to_url_str(const char *loc,
 	}
 	strncpy(prop_id, loc, dp_id - loc);
 	prop_id[dp_id - loc] = '\0';
-	snprintf(dest, dest_len, "/properties%s/datapoints%s",
+	rtl_snprintf(dest, dest_len, "/properties%s/datapoints%s",
 	    prop_id, dp_id);
 
 	return 0;
@@ -2292,7 +2293,7 @@ enum ada_err client_close_dp_put(const char *loc)
 	hc = client_req_ads_new();
 	state->request = CS_PUT_DP_CLOSE;
 	hc->client_tcp_recv_cb = client_recv_dp_put;
-	snprintf(state->buf, sizeof(state->buf),
+	rtl_snprintf(state->buf, sizeof(state->buf),
 	    "/devices/%s%s",
 	    state->client_key, state->xml_buf);
 
@@ -2360,7 +2361,7 @@ enum ada_err client_send_dp_fetched(const char *prop_loc)
 		return AE_INVAL_VAL;
 	}
 
-	xml_len = snprintf(state->xml_buf, sizeof(state->xml_buf),
+	xml_len = rtl_snprintf(state->xml_buf, sizeof(state->xml_buf),
 	    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 	    "<datapoint><fetched>true</fetched></datapoint>");
 
@@ -2371,7 +2372,7 @@ enum ada_err client_send_dp_fetched(const char *prop_loc)
 	hc->body_len = xml_len;
 	state->request = CS_PUT_DP_FETCH;
 
-	snprintf(state->buf, sizeof(state->buf),
+	rtl_snprintf(state->buf, sizeof(state->buf),
 	    "/devices/%s%s", state->client_key, url_str);
 	client_req_start(hc, HTTP_REQ_PUT, state->buf, &http_hdr_content_xml);
 	return AE_OK;
@@ -2514,7 +2515,7 @@ static enum ada_err client_send_data_int(struct prop *prop, int agent_echo)
 
 			state->long_val_index = consumed;
 
-			snprintf(uri, sizeof(uri),
+			rtl_snprintf(uri, sizeof(uri),
 			    "/devices/%s/properties/%s/datapoints.xml%s",
 			    state->client_key, prop->name,
 			    prop->echo ? "?echo=true" : "");
@@ -2574,7 +2575,7 @@ enum ada_err client_send_dp_loc_req(const char *name,
 	state->conn_state = CS_WAIT_POST;
 	state->request = CS_POST_DP_LOC;
 
-	snprintf(state->buf, sizeof(state->buf),
+	rtl_snprintf(state->buf, sizeof(state->buf),
 	    "/devices/%s/properties/%s/datapoints.xml",
 	    state->client_key, name);
 
@@ -2610,7 +2611,7 @@ enum ada_err client_get_dp_loc_req(const char *prop_loc)
 	state->request = CS_GET_DP_LOC;
 	state->prop_send_cb_arg = hc;
 	state->get_echo_inprog = 1;
-	snprintf(state->buf, sizeof(state->buf), "/devices/%s%s",
+	rtl_snprintf(state->buf, sizeof(state->buf), "/devices/%s%s",
 	    state->client_key, state->xml_buf);
 
 	memset(&prop_recvd, 0, sizeof(prop_recvd));
@@ -2636,7 +2637,7 @@ enum ada_err client_get_dp_req(const char *prop_loc, u32 data_off, u32 data_end)
 	hc->client_tcp_recv_cb = client_recv_dp;
 	state->prop_send_cb_arg = hc;
 
-	snprintf(state->buf, sizeof(state->buf),
+	rtl_snprintf(state->buf, sizeof(state->buf),
 	    "bytes=%lu-%lu",
 	    data_off, data_end);
 	range_hdr.name = "Range";
@@ -2692,7 +2693,7 @@ static void client_get_ping(struct client_state *state)
 	hc->client_tcp_recv_cb = client_recv_ping;
 	state->conn_state = CS_WAIT_PING;
 	state->request = CS_PING;
-	snprintf(uri, sizeof(uri), "/ping");
+	rtl_snprintf(uri, sizeof(uri), "/ping");
 	if (state->ping_time) {
 		client_arg_add(uri, sizeof(uri), "time=1");
 	}
@@ -2722,56 +2723,56 @@ static size_t client_gen_info_data(struct client_state *state,
 
 	flags = state->client_info_flags;
 
-	xml_len = snprintf(buf, buf_len,
+	xml_len = rtl_snprintf(buf, buf_len,
 	    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 	    "<device>");
 	head_len = xml_len;
 	if (flags & (CLIENT_UPDATE_MAJOR | CLIENT_UPDATE_MINOR)) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<api-major>%u</api-major>"
 		    "<api-minor>%u</api-minor>",
 		    CLIENT_API_MAJOR, CLIENT_API_MINOR);
 	}
 	if (flags & CLIENT_UPDATE_SWVER) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<sw-version>%s</sw-version>", adap_conf_sw_build());
 	}
 	if ((flags & CLIENT_UPDATE_LANIP) && netif_default) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<lan-ip>%s</lan-ip>",
 		    ipaddr_ntoa_r(&netif_default->ip_addr, ip, sizeof(ip)));
 	}
 	if (flags & CLIENT_UPDATE_MODEL) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<model>%s</model>", conf_sys_model);
 	}
 	if (flags & CLIENT_UPDATE_SETUP) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<setup-token>%s</setup-token>", state->setup_token);
 	}
 	if (flags & CLIENT_UPDATE_SETUP_LOCATION && state->setup_location) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<setup-location>%s</setup-location>",
 		    state->setup_location);
 	}
 	if (flags & CLIENT_UPDATE_SSID) {
 		client_get_ssid_uri(ssid_uri, sizeof(ssid_uri));
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<ssid>%s</ssid>", ssid_uri);
 	}
 	if (flags & CLIENT_UPDATE_PRODUCT_NAME) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<product-name>%s</product-name>",
 		    cf->host_symname);
 	}
 	if (flags & CLIENT_UPDATE_OEM) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<oem>%s</oem>"
 		    "<oem-model>%s</oem-model>",
 		    oem, oem_model);
 		oem_key_len = adap_conf_oem_key_get(oem_key, sizeof(oem_key));
 		if (oem_key_len > 0) {
-			xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+			xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 			    "<oem-key>");
 			outlen = buf_len - xml_len;
 			if (net_base64_encode(oem_key, oem_key_len,
@@ -2780,24 +2781,24 @@ static size_t client_gen_info_data(struct client_state *state,
 				outlen = 0;
 			}
 			xml_len += outlen;
-			xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+			xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 			    "</oem-key>");
 		}
 	}
 	if (flags & CLIENT_UPDATE_MAC) {
 		mac = cf->mac_addr;
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<mac>%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x</mac>",
 		    mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 	}
 	if (flags & CLIENT_UPDATE_HW_ID) {
-		xml_len += snprintf(buf + xml_len, buf_len - xml_len,
+		xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len,
 		    "<hwsig>%s</hwsig>", cf->hw_id);
 	}
 	if (xml_len == head_len) {
 		return 0;
 	}
-	xml_len += snprintf(buf + xml_len, buf_len - xml_len, "</device>");
+	xml_len += rtl_snprintf(buf + xml_len, buf_len - xml_len, "</device>");
 	return xml_len;
 }
 
@@ -2848,7 +2849,7 @@ static int client_put_info(struct client_state *state)
 	hc->body_buf = state->xml_buf;
 	hc->body_buf_len = hc->body_len;
 
-	snprintf(uri, sizeof(uri), "/devices/%s.xml", state->client_key);
+	rtl_snprintf(uri, sizeof(uri), "/devices/%s.xml", state->client_key);
 	client_req_start(hc, HTTP_REQ_PUT, uri, &http_hdr_content_xml);
 	return 0;
 }
@@ -2889,10 +2890,10 @@ static void client_cmd_put_rsp(struct client_state *state, unsigned int status)
 	char uri[CLIENT_GET_REQ_LEN];
 
 	if (state->tgt == CCT_LAN) {
-		snprintf(uri, sizeof(uri), "/ota_status.json?status=%u",
+		rtl_snprintf(uri, sizeof(uri), "/ota_status.json?status=%u",
 		    status);
 	} else {
-		snprintf(uri, sizeof(uri),
+		rtl_snprintf(uri, sizeof(uri),
 		    "/devices/%s/%s?cmd_id=%lu&status=%u",
 		    state->client_key, state->cmd.uri, state->cmd.id, status);
 	}
@@ -3046,7 +3047,7 @@ static int client_put_reg_window_start(struct client_state *state)
 	hc->body_buf_len = 2;
 	hc->body_len = 2;
 
-	snprintf(uri, sizeof(uri), "/devices/%s/start_reg_window.json",
+	rtl_snprintf(uri, sizeof(uri), "/devices/%s/start_reg_window.json",
 	    state->client_key);
 	client_req_start(hc, HTTP_REQ_PUT, uri, &http_hdr_content_json);
 	return 0;
@@ -3623,7 +3624,7 @@ static void client_commit_server(struct client_state *state)
 	const struct hostname_info *host_entry;
 
 	if (client_conf_server_change_en() && cf->conf_server[0] != '\0') {
-		snprintf(hc->host, sizeof(hc->host), "%s", cf->conf_server);
+		rtl_snprintf(hc->host, sizeof(hc->host), "%s", cf->conf_server);
 	} else {
 		host_entry = client_lookup_host(cf->region);
 		if (!host_entry) {
@@ -3631,11 +3632,11 @@ static void client_commit_server(struct client_state *state)
 		}
 
 		if (oem[0] && oem_model[0] && !cf->conf_serv_override) {
-			snprintf(hc->host, sizeof(hc->host),
+			rtl_snprintf(hc->host, sizeof(hc->host),
 			    CLIENT_SERVER_HOST_OEM_FMT,
 			    oem_model, oem, host_entry->domain);
 		} else {
-			snprintf(hc->host, sizeof(hc->host),
+			rtl_snprintf(hc->host, sizeof(hc->host),
 			    CLIENT_SERVER_HOST_DEF_FMT, host_entry->domain);
 		}
 	}
@@ -3784,7 +3785,7 @@ static void client_init_hw_id_default(struct ada_conf *cf)
 			client_log(LOG_ERR "ada_conf.hw_id not set");
 			return;
 		}
-		snprintf(hw_id, hw_id_len,
+		rtl_snprintf(hw_id, hw_id_len,
 		    "mac-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x",
 		    mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 		cf->hw_id = hw_id;
@@ -4026,7 +4027,7 @@ void client_page_post(struct server_req *req)
 
 	host = server_get_arg_by_name(req, "custom_host", buf, sizeof(buf));
 	if (host) {
-		snprintf(cf->conf_server, sizeof(cf->conf_server), "%s", host);
+		rtl_snprintf(cf->conf_server, sizeof(cf->conf_server), "%s", host);
 	}
 
 	cf->poll_interval = poll;
@@ -4079,7 +4080,7 @@ void client_json_regtoken_get(struct server_req *req)
 	client_lock();
 	if (cf->reg_token[0] != '\0' &&
 	    strcasecmp(state->reg_type, "Display")) {
-		snprintf(buf, sizeof(buf), "\"%s\"", cf->reg_token);
+		rtl_snprintf(buf, sizeof(buf), "\"%s\"", cf->reg_token);
 		reg_token = buf;
 	}
 	server_put(req,
@@ -4193,7 +4194,7 @@ void client_set_setup_token(const char *token)
 	struct client_state *state = &client_state;
 
 	client_lock();
-	snprintf(state->setup_token, sizeof(state->setup_token) - 1,
+	rtl_snprintf(state->setup_token, sizeof(state->setup_token) - 1,
 	    "%s", token);
 	state->client_info_flags |= CLIENT_UPDATE_SETUP;
 	client_unlock();

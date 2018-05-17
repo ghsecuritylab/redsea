@@ -189,7 +189,7 @@ static void client_redir_client_html(struct server_req *req)
 	char ip[30];
 	char loc[60];
 
-	snprintf(loc, sizeof(loc), "Location: http://%s/client.html\r\n",
+	rtl_snprintf(loc, sizeof(loc), "Location: http://%s/client.html\r\n",
 	    ipaddr_ntoa_r(&netif_default->ip_addr, ip, sizeof(ip)));
 
 	req->put_head(req, HTTP_STATUS_REDIR_PERM, loc);

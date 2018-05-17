@@ -190,8 +190,8 @@ VOID BOOT_Image2(VOID)
 	BOOT_VectorTableOverride(0x1003EFFC);    
 
 	/* set CPU clock if needed, default is 125MHz */
-	//CPU_ClkSet((u8)(CPU_CLOCK_SEL_VALUE));
-	//DelayUs(10);
+	CPU_ClkSet((u8)(CPU_CLOCK_SEL_VALUE));
+	DelayUs(10);
 
 #if (defined(CONFIG_CP))
 	CPTest_EnterImg2Ok();

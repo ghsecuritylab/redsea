@@ -30,7 +30,7 @@ int cmd_handle_argv(const struct cmd_info *cmds, int argc, char **argv)
 {
 	const struct cmd_info *cmd;
 
-#if 1 //add by will
+#if 0 //add by will
     printf("==> get cmd: ");
     for (int i=0; i<argc; i++)
     {

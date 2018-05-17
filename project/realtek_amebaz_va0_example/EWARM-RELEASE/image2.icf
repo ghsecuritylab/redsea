@@ -11,18 +11,21 @@ include "rom_symbol_v01_iar.icf";
  ****************************************/
 define symbol __ICFEDIT_region_ROM_start__       	= 0x00000000;
 define symbol __ICFEDIT_region_ROM_end__         	= 0x0007FFFF;
+/************************************************************************/
+/*add by herry*/
 define symbol __ICFEDIT_region_ROMBSS_RAM_start__       = 0x10000000;
 define symbol __ICFEDIT_region_ROMBSS_RAM_end__        	= 0x10001FFF;
 define symbol __ICFEDIT_region_BOOTLOADER_RAM_start__   = 0x10002000;
 define symbol __ICFEDIT_region_BOOTLOADER_RAM_end__     = 0x10004FFF;
 define symbol __ICFEDIT_region_BD_RAM_start__    	= 0x10005000;
-define symbol __ICFEDIT_region_BD_RAM_end__      	= 0x1003DFFF;
-define symbol __ICFEDIT_region_MSP_RAM_start__    	= 0x1003E000;
-define symbol __ICFEDIT_region_MSP_RAM_end__      	= 0x1003EFFF;
-define symbol __ICFEDIT_region_RDP_RAM_start__    	= 0x1003F000;
-define symbol __ICFEDIT_region_RDP_RAM_end__      	= 0x1003FFEF;
+define symbol __ICFEDIT_region_BD_RAM_end__      	= 0x1003EFFF;
+define symbol __ICFEDIT_region_MSP_RAM_start__    	= 0x1003F000;
+define symbol __ICFEDIT_region_MSP_RAM_end__      	= 0x1003FFFF;
+define symbol __ICFEDIT_region_RDP_RAM_start__    	= 0x1003FFFF;
+define symbol __ICFEDIT_region_RDP_RAM_end__      	= 0x1003FFFF;
 define symbol __ICFEDIT_region_IMG2_TEMP_start__ 	= 0x10006000;
 define symbol __ICFEDIT_region_IMG2_TEMP_end__   	= 0x1000BFFF;
+/************************************************************************/
 define symbol __ICFEDIT_region_XIP_BOOT_start__ 	= 0x08000000+0x20;
 define symbol __ICFEDIT_region_XIP_BOOT_end__   	= 0x08003FFF;
 define symbol __ICFEDIT_region_XIP_OTA1_start__ 	= 0x0800B000+0x20;

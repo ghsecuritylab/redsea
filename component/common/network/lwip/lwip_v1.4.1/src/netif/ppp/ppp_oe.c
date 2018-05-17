@@ -368,7 +368,7 @@ pppoe_dispatch_disc_pkt(struct netif *netif, struct pbuf *pb)
 #endif
         sc = pppoe_find_softc_by_hunique((u8_t*)pb->payload + off + sizeof(pt), len, netif);
         if (sc != NULL) {
-          snprintf(devname, sizeof(devname), "%c%c%"U16_F, sc->sc_ethif->name[0], sc->sc_ethif->name[1], sc->sc_ethif->num);
+          rtl_snprintf(devname, sizeof(devname), "%c%c%"U16_F, sc->sc_ethif->name[0], sc->sc_ethif->name[1], sc->sc_ethif->num);
         }
         break;
       case PPPOE_TAG_ACCOOKIE:

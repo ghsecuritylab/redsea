@@ -3328,7 +3328,6 @@ static int ssl_handshake_init( ssl_context *ssl )
         ssl_session_free( ssl->session_negotiate );
     if( ssl->handshake )
         ssl_handshake_free( ssl->handshake );
-
     /*
      * Either the pointers are now NULL or cleared properly and can be freed.
      * Now allocate missing structures.
@@ -3365,7 +3364,6 @@ static int ssl_handshake_init( ssl_context *ssl )
         ssl->handshake = NULL;
         ssl->transform_negotiate = NULL;
         ssl->session_negotiate = NULL;
-
         return( POLARSSL_ERR_SSL_MALLOC_FAILED );
     }
 
@@ -3377,7 +3375,6 @@ static int ssl_handshake_init( ssl_context *ssl )
 #if defined(POLARSSL_X509_CRT_PARSE_C)
     ssl->handshake->key_cert = ssl->key_cert;
 #endif
-
     return( 0 );
 }
 

@@ -37,6 +37,7 @@
 #include <hal_crypto.h>
 #endif
 
+
 #if defined(MBEDTLS_SSL_TLS_C)
 
 #if defined(MBEDTLS_PLATFORM_C)
@@ -5328,7 +5329,6 @@ static int ssl_handshake_init( mbedtls_ssl_context *ssl )
         ssl->handshake = NULL;
         ssl->transform_negotiate = NULL;
         ssl->session_negotiate = NULL;
-
         return( MBEDTLS_ERR_SSL_ALLOC_FAILED );
     }
 
@@ -5346,7 +5346,6 @@ static int ssl_handshake_init( mbedtls_ssl_context *ssl )
             ssl->handshake->retransmit_state = MBEDTLS_SSL_RETRANS_PREPARING;
         else
             ssl->handshake->retransmit_state = MBEDTLS_SSL_RETRANS_WAITING;
-
         ssl_set_timer( ssl, 0 );
     }
 #endif
@@ -5404,9 +5403,10 @@ int mbedtls_ssl_setup( mbedtls_ssl_context *ssl,
 {
     int ret;
     const size_t len = MBEDTLS_SSL_BUFFER_LEN;
-
     ssl->conf = conf;
 
+    PRINTF("\n\ravailable heap %d\n\r", xPortGetFreeHeapSize());
+    PRINTF("malloc len: %d\n", len);
     /*
      * Prepare base structures
      */
@@ -5449,7 +5449,7 @@ int mbedtls_ssl_setup( mbedtls_ssl_context *ssl,
         ssl->in_iv  = ssl->in_buf + 13;
         ssl->in_msg = ssl->in_buf + 13;
     }
-
+    
     if( ( ret = ssl_handshake_init( ssl ) ) != 0 )
         return( ret );
 
@@ -6338,7 +6338,7 @@ int mbedtls_ssl_handshake( mbedtls_ssl_context *ssl )
 {
     int ret = 0;
 
-    if( ssl == NULL || ssl->conf == NULL )
+    if( (ssl == NULL) || (ssl->conf == NULL) )
         return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> handshake" ) );

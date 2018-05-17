@@ -29,7 +29,7 @@
 #include <ayla/log.h>
 #include <ayla/mod_log.h>
 
-#define TOTAL_FLASH_SIZE	0x100000
+#define TOTAL_FLASH_SIZE	0xB0000//(0x100000 - 1024*100)
 
 #define CONF_FLASH_BLOCK_SIZE	4096
 #define CONF_FLASH_MEDIA	0
@@ -41,7 +41,7 @@
 #define FACTORY_CONF_ADDRESS	(TOTAL_FLASH_SIZE - FACTORY_CONF_SIZE)
 
 #if 1//add by will
-#define min(a, b) ((a < b) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 /*
  * Each supported file has its own flash_state.

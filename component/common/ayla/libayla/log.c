@@ -198,7 +198,7 @@ size_t log_put_va_sev(u8 mod_nr, enum log_sev sev,
 	xSemaphoreTake(log_lock, portMAX_DELAY);
 #endif
 	if (mod_nr != LOG_MOD_NONE) {
-		len = snprintf(log_line, rlen, "%s", log_prefix);
+		len = rtl_snprintf(log_line, rlen, "%s", log_prefix);
 	}
 #if defined(AYLA_FreeRTOS) || defined(QCA4010_SDK)
 	if (clock_source() > CS_DEF) {
@@ -209,17 +209,17 @@ size_t log_put_va_sev(u8 mod_nr, enum log_sev sev,
 		 * hasn't been shown, otherwise just show hh:mm:ss + ms.
 		 */
 		rough_time = ct.ct_sec / (60 * 60);
-		len += snprintf(log_line + len, rlen, "%s.%3.3lu ",
+		len += rtl_snprintf(log_line + len, rlen, "%s.%3.3lu ",
 		    &time_stamp[rough_time == last_rough_time ?
 		    CLOCK_FMT_TIME : 0],
 		    msec);
 		last_rough_time = rough_time;
 	} else {
-		len += snprintf(log_line + len, rlen, "%lu ", mtime);
+		len += rtl_snprintf(log_line + len, rlen, "%lu ", mtime);
 	}
 #endif
 	if (sev != LOG_SEV_NONE) {
-		len += snprintf(log_line + len, rlen - len,
+		len += rtl_snprintf(log_line + len, rlen - len,
 #ifdef LOG_SEV_SHORT
 		    "%c ",
 		    log_sev_chars[sev]);
@@ -234,7 +234,7 @@ size_t log_put_va_sev(u8 mod_nr, enum log_sev sev,
 		signed char task = pcTaskGetTaskName(NULL)[0];
 
 		if (task != 't') {	/* omit tcpip_thread */
-			len += snprintf(log_line + len, rlen - len, "(%c) ",
+			len += rtl_snprintf(log_line + len, rlen - len, "(%c) ",
 			    task);
 		}
 	}
@@ -243,16 +243,19 @@ size_t log_put_va_sev(u8 mod_nr, enum log_sev sev,
 #ifdef LOG_THREAD_CT
 	thread_id = log_thread_id();
 	if (thread_id) {
-		len += snprintf(log_line + len, rlen - len, "%s ", thread_id);
+		len += rtl_snprintf(log_line + len, rlen - len, "%s ", thread_id);
 	}
 #endif /* LOG_THREAD_CT */
 
 	mod_name = log_mod_get_name(mod_nr);
 	if (mod_name) {
-		len += snprintf(log_line + len, rlen - len, "%s: ", mod_name);
+		len += rtl_snprintf(log_line + len, rlen - len, "%s: ", mod_name);
 	}
 	body = log_line + len;
-	len += vsnprintf(body, rlen - len, fmt, args);
+
+	//add by herry
+	//len += vsnprintf(body, rlen - len, fmt, args);
+	len += rtl_vsnprintf(body, rlen - len, fmt, args);
 
 #ifndef NO_LOG_BUF
 	if (log_enabled && !(mod_nr & LOG_MOD_NOSEND)) {
@@ -368,11 +371,11 @@ void log_bytes_in_hex(u8 mod_nr, void *buf, int len)
 	for (i = 0; i < len; ) {
 		off = 0;
 		for (j = 0; j < 16 && i < len; j++) {
-			off += snprintf(tmpbuf + off,
+			off += rtl_snprintf(tmpbuf + off,
 			    sizeof(tmpbuf) - off, "%2.2x ",
 			    ((u8 *)buf)[i]);
 			if ((j + 1) % 4 == 0) {
-				off += snprintf(tmpbuf + off,
+				off += rtl_snprintf(tmpbuf + off,
 				    sizeof(tmpbuf) - off, " ");
 			}
 			i++;
@@ -388,7 +391,10 @@ int printcli(const char *fmt, ...)
 	size_t len;
 
 	ADA_VA_START(args, fmt);
-	len = vsnprintf(buf, sizeof(buf), fmt, args);
+	
+	//add by herry
+	//len = vsnprintf(buf, sizeof(buf), fmt, args);
+	len = rtl_vsnprintf(buf, sizeof(buf), fmt, args);
 	ADA_VA_END(args);
 
 	if (buf[len - 1] != '\n' && len < sizeof(buf)) {
@@ -413,7 +419,10 @@ int printcli_s(const char *fmt, ...)
 	size_t len;
 
 	ADA_VA_START(args, fmt);
-	len = vsnprintf(buf, sizeof(buf), fmt, args);
+	//add by herry
+	//len = vsnprintf(buf, sizeof(buf), fmt, args);
+	len = rtl_vsnprintf(buf, sizeof(buf), fmt, args);
+
 	ADA_VA_END(args);
 
 	if (len == sizeof(buf)) {

@@ -15,6 +15,7 @@ CERTS_PEM = \
 	entrust-ca-sha1-2048-sn-0x456b5054.pem \
 	valicert-cl2-sha1-1024.pem \
 	Baltimore_CyberTrust_Root.pem \
+	DigiCertGlobalRootCA.pem \
 	$(NULL)
 
 CERTS_DER = $(CERTS_PEM:%.pem=%.der)

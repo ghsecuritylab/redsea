@@ -154,7 +154,7 @@ static void stream_log(struct stream_pcb *sp, const char *fmt, ...)
 	if (sp) {
 		ASSERT(fmt[0] & LOG_BASE);	/* start with sev code */
 		ASSERT(!(fmt[1] & LOG_BASE));	/* only one severity code */
-		snprintf(buf, sizeof(buf), "%c[%u]%s",
+		rtl_snprintf(buf, sizeof(buf), "%c[%u]%s",
 		    fmt[0], sp->id, &fmt[1]);
 		fmt = buf;
 		mod |= sp->log_option;
@@ -731,7 +731,6 @@ struct stream_pcb *stream_new(struct stream_ssl_id *sess_id,
 	if (sp->tcp_metric) {
 		sp->tcp_metric->connect_start = time_now();
 	}
-
 	if (sess_id) {
 		sp->enable = 1;
 	}
@@ -748,6 +747,9 @@ struct stream_pcb *stream_new(struct stream_ssl_id *sess_id,
 #if STREAM_STACK_DEBUG
 	memset(sp->guard_zone, 0x55, sizeof(sp->guard_zone));
 #endif
+
+	//add by herry
+	//PRINTF("\n\r[MEM] ssl available heap %d\n\r", xPortGetFreeHeapSize());
 
 	if (xTaskCreate(stream_idle,
 	    "A_Stream",
@@ -864,8 +866,10 @@ static enum ada_err stream_tcp_connected(struct stream_pcb *sp)
 			mbedtls_ssl_conf_authmode(&sp->ssl_cfg,
 			    MBEDTLS_SSL_VERIFY_NONE);
 		}
+
 		mbedtls_ssl_conf_rng(&sp->ssl_cfg, adc_rng_random_fill, NULL);
 		rc = mbedtls_ssl_setup(&sp->ssl, &sp->ssl_cfg);
+
 		ada_unlock(stream_lock);
 		while ((rc = mbedtls_ssl_handshake(&sp->ssl)) != 0) {
 			if ((rc != MBEDTLS_ERR_SSL_WANT_READ &&
@@ -938,7 +942,7 @@ static enum ada_err stream_connect_sync(struct stream_pcb *sp)
 	if (sp->enable) {
 		/* HTTPS session */
 		mbedtls_net_init(&sp->ssl_fd);
-		snprintf(buf_port, sizeof(buf_port), "%u", sp->remote_port);
+		rtl_snprintf(buf_port, sizeof(buf_port), "%u", sp->remote_port);
 		ada_unlock(stream_lock);
 		rc = mbedtls_net_connect(&sp->ssl_fd, sp->host, buf_port,
 		    MBEDTLS_NET_PROTO_TCP);

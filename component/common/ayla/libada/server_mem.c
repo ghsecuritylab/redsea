@@ -35,7 +35,7 @@ void server_send_static(struct server_req *req)
 #else
 	content_len = sbuf->len;
 #endif
-	snprintf(content_type, sizeof(content_type), "Content-Type: %s\r\n"
+	rtl_snprintf(content_type, sizeof(content_type), "Content-Type: %s\r\n"
 	    "Cache-Control: private, max-age=3600\r\n"
 #ifndef AMEBA
 	    "Content-Length: %u\r\n"

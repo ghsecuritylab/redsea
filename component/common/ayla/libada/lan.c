@@ -302,7 +302,7 @@ static void client_lan_key_gen(struct client_state *state,
 	char seed[CLIENT_LAN_SEED_SIZE];
 	size_t seed_len;
 
-	seed_len = snprintf(seed, sizeof(seed), "%s%s", root, suffix);
+	seed_len = rtl_snprintf(seed, sizeof(seed), "%s%s", root, suffix);
 	ASSERT(seed_len < sizeof(seed));
 
 	/*
@@ -335,10 +335,10 @@ static int client_lan_gen_keys(struct client_state *state,
 	int len;
 
 	/* Run the KDF Functions to generate the keys */
-	len = snprintf(mod_root, sizeof(mod_root) - 1,
+	len = rtl_snprintf(mod_root, sizeof(mod_root) - 1,
 	    "%s%s%s%s", random_two, lan->random_one, time_two, lan->time_one);
 	mod_root[len] = '\0';
-	len = snprintf(app_root, sizeof(app_root) - 1,
+	len = rtl_snprintf(app_root, sizeof(app_root) - 1,
 	    "%s%s%s%s", lan->random_one, random_two, lan->time_one, time_two);
 	app_root[len] = '\0';
 
@@ -652,7 +652,7 @@ static int client_lan_send_get(struct client_lan_reg *lan)
 
 	memset(&prop_recvd, 0, sizeof(prop_recvd));
 
-	snprintf(lan->buf, sizeof(lan->buf), "%s/commands.json", lan->uri);
+	rtl_snprintf(lan->buf, sizeof(lan->buf), "%s/commands.json", lan->uri);
 
 	client_lan_wait(lan);
 	client_req_start(hc, HTTP_REQ_GET, lan->buf, NULL);
@@ -682,7 +682,7 @@ static int client_lan_gen_random(struct client_lan_reg *lan)
 	}
 
 	memcpy(lan->random_one, random_one, CLIENT_LAN_RAND_SIZE);
-	snprintf(lan->time_one, sizeof(lan->time_one) - 1,
+	rtl_snprintf(lan->time_one, sizeof(lan->time_one) - 1,
 	    "%lu%lu", clock_ms(), clock_utc());
 	return 0;
 }
@@ -704,18 +704,18 @@ static void client_lan_key_exchange(struct client_lan_reg *lan,
 	rc = client_lan_gen_random(lan);
 	ASSERT(!rc);
 
-	xml_len = snprintf(state->xml_buf,
+	xml_len = rtl_snprintf(state->xml_buf,
 	    sizeof(state->xml_buf) - 1, "{\"key_exchange\":{\"ver\":%u,"
 	    "\"random_1\":\"%s\",\"time_1\":%s,\"proto\":%u,",
 	    CLIENT_LAN_EXCH_VER, lan->random_one, lan->time_one,
 	    CLIENT_LAN_PROTO_NUM);
 	if (!lan->pubkey) {
-		xml_len += snprintf(state->xml_buf + xml_len,
+		xml_len += rtl_snprintf(state->xml_buf + xml_len,
 		    sizeof(state->xml_buf) - 1 - xml_len,
 		    "\"key_id\":%u}}",
 		    lcf->lanip_key_id);
 	} else {
-		xml_len += snprintf(state->xml_buf + xml_len,
+		xml_len += rtl_snprintf(state->xml_buf + xml_len,
 		    sizeof(state->xml_buf) - 1 - xml_len,
 		    "\"sec\":\"");
 
@@ -730,7 +730,7 @@ static void client_lan_key_exchange(struct client_lan_reg *lan,
 		net_base64_encode(tmp_str, rc,
 		    state->xml_buf + xml_len, &tmp_len);
 		xml_len += tmp_len;
-		xml_len += snprintf(state->xml_buf + xml_len,
+		xml_len += rtl_snprintf(state->xml_buf + xml_len,
 		    sizeof(state->xml_buf) - 1 - xml_len,
 		    "\"}}");
 	}
@@ -738,7 +738,7 @@ static void client_lan_key_exchange(struct client_lan_reg *lan,
 	hc->body_buf_len = xml_len;
 	hc->body_len = xml_len;
 
-	snprintf(uri, sizeof(uri), "%s/key_exchange.json", lan->uri);
+	rtl_snprintf(uri, sizeof(uri), "%s/key_exchange.json", lan->uri);
 	client_lan_wait(lan);
 	client_req_start(hc, HTTP_REQ_POST, uri, &http_hdr_content_json);
 }
@@ -831,10 +831,10 @@ static enum ada_err client_lan_get_prop_data(char *buf, u32 buf_len,
 	if (!buf_len) {
 		return AE_INVAL_VAL;
 	}
-	totlen = snprintf(tmpbuf, sizeof(tmpbuf), "{\"name\":\"");
+	totlen = rtl_snprintf(tmpbuf, sizeof(tmpbuf), "{\"name\":\"");
 	if (send_offset < totlen) {
 		/* check if buf can hold the initial part of the tag */
-		len = snprintf(buf, buf_len, "%s", tmpbuf_ptr + send_offset);
+		len = rtl_snprintf(buf, buf_len, "%s", tmpbuf_ptr + send_offset);
 		if (len >= buf_len) {
 			return AE_BUF;
 		}
@@ -871,13 +871,13 @@ static enum ada_err client_lan_get_prop_data(char *buf, u32 buf_len,
 	send_offset -= totlen;
 
 	/* check if buf can hold the middle part of the tag */
-	totlen = snprintf(tmpbuf, sizeof(tmpbuf), "\",\"value\":%s",
+	totlen = rtl_snprintf(tmpbuf, sizeof(tmpbuf), "\",\"value\":%s",
 	    prop_type_is_str(type) ? "\"" : "");
 	if (totlen >= sizeof(tmpbuf)) {
 		totlen = sizeof(tmpbuf) - 1;
 	}
 	if (send_offset < totlen) {
-		len = snprintf(buf, buf_len, "%s", tmpbuf_ptr + send_offset);
+		len = rtl_snprintf(buf, buf_len, "%s", tmpbuf_ptr + send_offset);
 		if (len >= buf_len) {
 			len = buf_len - 1;
 		}
@@ -910,7 +910,7 @@ static enum ada_err client_lan_get_prop_data(char *buf, u32 buf_len,
 			}
 			send_offset += processed;
 		} else {
-			len = snprintf(buf, buf_len, "%s", value + send_offset);
+			len = rtl_snprintf(buf, buf_len, "%s", value + send_offset);
 			if (len >= buf_len) {
 				return AE_BUF;
 			}
@@ -928,10 +928,10 @@ static enum ada_err client_lan_get_prop_data(char *buf, u32 buf_len,
 	send_offset -= value_len;
 
 	/* check if buf can hold the last part of the tag */
-	totlen = snprintf(tmpbuf, sizeof(tmpbuf), "%s}",
+	totlen = rtl_snprintf(tmpbuf, sizeof(tmpbuf), "%s}",
 	    prop_type_is_str(type) ? "\"" : "");
 	if (send_offset < totlen) {
-		len = snprintf(buf, buf_len, "%s", tmpbuf_ptr + send_offset);
+		len = rtl_snprintf(buf, buf_len, "%s", tmpbuf_ptr + send_offset);
 		if (len >= buf_len) {
 			if (consumed && buf_len) {
 				(*consumed) += buf_len - 1;
@@ -958,7 +958,7 @@ static u32 client_lan_determine_payload_size(u16 seq_no, ssize_t data_len)
 	char buf[50];
 
 	/* start by determining the size of the tags which will be encrypted */
-	size_of_encrypt = data_len + snprintf(buf, sizeof(buf),
+	size_of_encrypt = data_len + rtl_snprintf(buf, sizeof(buf),
 	    "{\"seq_no\":%d,\"data\":}", seq_no);
 	/*
 	 * determine the length of the encrypted block after base64 encoding.
@@ -973,7 +973,7 @@ static u32 client_lan_determine_payload_size(u16 seq_no, ssize_t data_len)
 	payload_len += BASE64_LEN_EXPAND(ADC_SHA256_HASH_SIZE);
 
 	/* finally add the cost of the final enclosure for sending */
-	payload_len += snprintf(buf, sizeof(buf),
+	payload_len += rtl_snprintf(buf, sizeof(buf),
 	    "{\"enc\":\"\",\"sign\":\"\"}");
 
 	return payload_len;
@@ -1049,7 +1049,7 @@ static void client_lan_cmd_put_rsp(struct client_state *state, int status)
 	struct client_lan_reg *lan = state->lan_cmd_responder;
 	struct http_client *hc = &lan->http_client;
 
-	snprintf(lan->buf, sizeof(lan->buf),
+	rtl_snprintf(lan->buf, sizeof(lan->buf),
 	    "%s?cmd_id=%lu&status=%d",
 	    state->cmd.uri, state->cmd.id, status);
 	client_lan_wait(lan);
@@ -1095,7 +1095,7 @@ static enum ada_err client_lan_send_signature(struct client_state *state,
 		CLIENT_LOGF(LOG_WARN, "enc fail");
 		return AE_INVAL_VAL;
 	}
-	len = snprintf(lan->buf, sizeof(lan->buf) - 1,
+	len = rtl_snprintf(lan->buf, sizeof(lan->buf) - 1,
 	    "\",\"sign\":\"%s\"}", base64_sign);
 	err = http_client_send(hc, lan->buf, len);
 	if (err != AE_OK) {
@@ -1132,7 +1132,7 @@ static void client_lan_send_resp_body(struct http_client *hc)
 		lan->recv_buf[xlen++] = '}';
 		lan->recv_buf[xlen] = '\0';
 
-		len = snprintf(sendbuf, sizeof(sendbuf) - 1,
+		len = rtl_snprintf(sendbuf, sizeof(sendbuf) - 1,
 		    "{\"seq_no\":%d,\"data\":", lan->send_seq_no);
 		if (len > sizeof(sendbuf) - 1) {
 			len = sizeof(sendbuf) - 1;
@@ -1200,7 +1200,7 @@ static enum ada_err client_lan_send_buf_resp(struct client_lan_reg *lan)
 	struct server_req *cmd_req = &state->cmd_req;
 
 	if (lan->recv_buf[0] == '\0') {
-		snprintf(lan->recv_buf, lan->recv_buf_len, "{}");
+		rtl_snprintf(lan->recv_buf, lan->recv_buf_len, "{}");
 		state->cmd.output_len = 2;
 	}
 	hc->body_len = client_lan_determine_payload_size(lan->send_seq_no,
@@ -1247,7 +1247,7 @@ static void client_lan_send_data_cb(struct http_client *hc)
 	if (hc->req_part == 0) {
 		/* copy the initial part to be encrypted to a char buffer */
 		leftover = tmpstr;
-		leftover_len = snprintf(tmpstr, sizeof(tmpstr),
+		leftover_len = rtl_snprintf(tmpstr, sizeof(tmpstr),
 		    "{\"seq_no\":%d,\"data\":", lan->send_seq_no);
 		ASSERT(leftover_len < sizeof(tmpstr));
 	} else {
@@ -1376,7 +1376,7 @@ enum ada_err client_send_lan_data(struct client_lan_reg *lan, struct prop *prop,
 	hc = client_lan_req_new(lan);
 	hc->body_len = len;
 
-	snprintf(uri, sizeof(uri), "%s/property/datapoint.json%s",
+	rtl_snprintf(uri, sizeof(uri), "%s/property/datapoint.json%s",
 	    lan->uri, prop->echo ? "?echo=true" : "");
 
 	lan->send_val_offset = 0;
@@ -2165,7 +2165,7 @@ static void client_lan_add(struct client_state *state,
 	hc->host_port = parse->port;
 
 	bp = (u8 *)&hc->host_addr;
-	snprintf(hc->host, sizeof(hc->host), "%u.%u.%u.%u",
+	rtl_snprintf(hc->host, sizeof(hc->host), "%u.%u.%u.%u",
 	    bp[0], bp[1], bp[2], bp[3]);
 
 	hc->client_send_data_cb = NULL;

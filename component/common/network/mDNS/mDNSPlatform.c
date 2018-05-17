@@ -29,10 +29,13 @@ extern char conf_sys_dev_id[];
 // called when mDNS initialization
 char *mDNSPlatformHostname(void)
 {
+	//add by herry
+#if 0
 #if LWIP_NETIF_HOSTNAME
 	return xnetif[0].hostname;
 #else
 	return "ameba";
+#endif
 #endif
     return conf_sys_dev_id;
 }

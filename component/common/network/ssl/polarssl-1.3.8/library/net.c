@@ -183,7 +183,7 @@ int net_connect( int *fd, const char *host, int port )
 
     /* getaddrinfo expects port as a string */
     memset( port_str, 0, sizeof( port_str ) );
-    snprintf( port_str, sizeof( port_str ), "%d", port );
+    rtl_snprintf( port_str, sizeof( port_str ), "%d", port );
 
     /* Do name resolution with both IPv6 and IPv4, but only TCP */
     memset( &hints, 0, sizeof( hints ) );
@@ -277,7 +277,7 @@ int net_bind( int *fd, const char *bind_ip, int port )
 
     /* getaddrinfo expects port as a string */
     memset( port_str, 0, sizeof( port_str ) );
-    snprintf( port_str, sizeof( port_str ), "%d", port );
+    rtl_snprintf( port_str, sizeof( port_str ), "%d", port );
 
     /* Bind to IPv6 and/or IPv4, but only in TCP */
     memset( &hints, 0, sizeof( hints ) );

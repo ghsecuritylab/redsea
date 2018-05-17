@@ -332,7 +332,7 @@ int ada_conf_set(struct ada_conf_ctx *ctx, const char *name, const char *val)
 	 * Convert name to tokens.
 	 * Copy name first since conf_str_to_tokens() modifies its input.
 	 */
-	snprintf(name_buf, sizeof(name_buf), "%s", name);
+	rtl_snprintf(name_buf, sizeof(name_buf), "%s", name);
 	tok_len = conf_str_to_tokens(name_buf, tk, sizeof(tk));
 	if (tok_len <= 0) {
 		return -1;

@@ -429,15 +429,15 @@ size_t prop_fmt(char *buf, size_t len, enum ayla_tlv_type type,
 	*out_val = buf;
 	switch (type) {
 	case ATLV_INT:
-		rc = snprintf(buf, len, "%ld", *(s32 *)val);
+		rc = rtl_snprintf(buf, len, "%ld", *(s32 *)val);
 		break;
 
 	case ATLV_UINT:
-		rc = snprintf(buf, len, "%lu", *(u32 *)val);
+		rc = rtl_snprintf(buf, len, "%lu", *(u32 *)val);
 		break;
 
 	case ATLV_BOOL:
-		rc = snprintf(buf, len, "%u", *(u8 *)val != 0);
+		rc = rtl_snprintf(buf, len, "%u", *(u8 *)val != 0);
 		break;
 
 	case ATLV_UTF8:
@@ -458,7 +458,7 @@ size_t prop_fmt(char *buf, size_t len, enum ayla_tlv_type type,
 		cents = tenths % 10;
 		tenths = (tenths / 10) % 10;
 		ones /= 100;
-		rc = snprintf(buf, len, "%s%ld.%u%u",
+		rc = rtl_snprintf(buf, len, "%s%ld.%u%u",
 		    sign, ones, tenths, cents);
 		break;
 
@@ -475,7 +475,7 @@ size_t prop_fmt(char *buf, size_t len, enum ayla_tlv_type type,
 	default:
 		rc = 0;
 		for (i = 0; i < val_len; i++) {
-			rc += snprintf(buf + rc, len - rc, "%2.2x ",
+			rc += rtl_snprintf(buf + rc, len - rc, "%2.2x ",
 			    *((unsigned char *)val + i));
 		}
 		break;

@@ -1466,7 +1466,7 @@ void fATXP(void *arg)
 		char buf[32];
 		int index = 0;
 		memset(buf, 0, sizeof(buf));
-		snprintf(buf, 32, "%s,%s,", argv[1], argv[2]);
+		rtl_snprintf(buf, 32, "%s,%s,", argv[1], argv[2]);
 		index = strlen(buf);
 #endif
 		if(strcmp(argv[2], "dtim") == 0){

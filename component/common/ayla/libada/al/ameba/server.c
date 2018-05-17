@@ -7,12 +7,12 @@
  * Ayla Networks, Inc.
  */
 #define HAVE_UTYPES
+#include <sys/types.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <ctype.h>
-#include <sys/types.h>
 #include <FreeRTOS.h>
 #include <httpd/httpd.h>
 #include <sys/queue.h>
@@ -216,9 +216,9 @@ static void server_put_head(struct server_req *req, unsigned int status,
 	AYLA_ASSERT(req->req_impl);
 	conn = (struct httpd_conn *)req->req_impl;
 
-	snprintf(status_str, sizeof(status_str), "%u %s", status,
+	rtl_snprintf(status_str, sizeof(status_str), "%u %s", status,
 	    server_status_msg(status));
-	len = snprintf(req->buf, SERVER_BUFLEN, "HTTP/1.1 %u %s\r\n",
+	len = rtl_snprintf(req->buf, SERVER_BUFLEN, "HTTP/1.1 %u %s\r\n",
 	    status, server_status_msg(status));
 	if (server_send(req, req->buf, len)) {
 		goto out;
@@ -275,7 +275,7 @@ static void server_flush(struct server_req *req, const char *msg)
 	}
 	server_io_debug(msg, req->len, "server tx chunk");
 
-	len = snprintf(buf, sizeof(buf), "%x\r\n", req->len);
+	len = rtl_snprintf(buf, sizeof(buf), "%x\r\n", req->len);
 	if (httpd_response_write_data(conn, buf, len) != len) {
 		req->err = AE_ERR;
 		goto out;
@@ -485,7 +485,7 @@ int server_host_match(const struct server_req *req, const char *host)
 	return ipaddr_addr(host) == xnetif[0].ip_addr.addr;
 }
 
-#if 0//add by will
+#if 1//add by will
 void httpd_response_not_found(struct httpd_conn *conn, char *msg)
 {
 	char msg_buf[200];
@@ -515,7 +515,7 @@ void server_up(void)
 
 	if (http_server_is_up == 0) {
 		http_server_is_up = 1;
-		#if 0 //add by will
+		#if 1 //add by will
 		httpd_setup_idle_timeout(5);
 		#endif 
 		if (httpd_start(80, 5, 8192, HTTPD_THREAD_SINGLE,

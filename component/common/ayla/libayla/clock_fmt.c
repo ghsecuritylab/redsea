@@ -17,6 +17,8 @@
 #include <ayla/utypes.h>
 #include <ayla/clock.h>
 
+
+
 /*
  * convert time to RFC 3339 / ISO 8601 "YYYY-MM-DDThh:mm:ss" format
  */
@@ -25,8 +27,10 @@ void clock_fmt(char *buf, size_t len, u32 time)
 	struct clock_info clk;
 
 	clock_fill_details(&clk, time);
-	snprintf(buf, len, "%4.4lu-%2.2u-%2.2uT%2.2u:%2.2u:%2.2u",
-	    clk.year, clk.month, clk.days, clk.hour, clk.min, clk.sec);
+
+	//add by herry
+	rtl_snprintf(buf, len, "%4.4lu-%2.2u-%2.2uT%2.2u:%2.2u:%2.2u",
+	   clk.year, clk.month, clk.days, clk.hour, clk.min, clk.sec);
 }
 
 /*

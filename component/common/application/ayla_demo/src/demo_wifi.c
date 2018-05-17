@@ -103,7 +103,7 @@ void demo_wifi_init(void)
 	 * Set the network name for AP mode, for use during Wi-Fi setup.
 	 */
 	cf->mac_addr = LwIP_GetMAC(&xnetif[0]);
-	snprintf(ssid, sizeof(ssid),
+	rtl_snprintf(ssid, sizeof(ssid),
 	    OEM_AP_SSID_PREFIX "-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x",
 	    cf->mac_addr[0], cf->mac_addr[1], cf->mac_addr[2],
 	    cf->mac_addr[3], cf->mac_addr[4], cf->mac_addr[5]);

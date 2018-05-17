@@ -768,16 +768,16 @@ int x509_dn_gets( char *buf, size_t size, const x509_name *dn )
 
         if( name != dn )
         {
-            ret = snprintf( p, n, ", " );
+            ret = rtl_snprintf( p, n, ", " );
             SAFE_SNPRINTF();
         }
 
         ret = oid_get_attr_short_name( &name->oid, &short_name );
 
         if( ret == 0 )
-            ret = snprintf( p, n, "%s=", short_name );
+            ret = rtl_snprintf( p, n, "%s=", short_name );
         else
-            ret = snprintf( p, n, "\?\?=" );
+            ret = rtl_snprintf( p, n, "\?\?=" );
         SAFE_SNPRINTF();
 
         for( i = 0; i < name->val.len; i++ )
@@ -791,7 +791,7 @@ int x509_dn_gets( char *buf, size_t size, const x509_name *dn )
             else s[i] = c;
         }
         s[i] = '\0';
-        ret = snprintf( p, n, "%s", s );
+        ret = rtl_snprintf( p, n, "%s", s );
         SAFE_SNPRINTF();
         name = name->next;
     }
@@ -820,14 +820,14 @@ int x509_serial_gets( char *buf, size_t size, const x509_buf *serial )
         if( i == 0 && nr > 1 && serial->p[i] == 0x0 )
             continue;
 
-        ret = snprintf( p, n, "%02X%s",
+        ret = rtl_snprintf( p, n, "%02X%s",
                 serial->p[i], ( i < nr - 1 ) ? ":" : "" );
         SAFE_SNPRINTF();
     }
 
     if( nr != serial->len )
     {
-        ret = snprintf( p, n, "...." );
+        ret = rtl_snprintf( p, n, "...." );
         SAFE_SNPRINTF();
     }
 
@@ -848,9 +848,9 @@ int x509_sig_alg_gets( char *buf, size_t size, const x509_buf *sig_oid,
 
     ret = oid_get_sig_alg_desc( sig_oid, &desc );
     if( ret != 0 )
-        ret = snprintf( p, n, "???"  );
+        ret = rtl_snprintf( p, n, "???"  );
     else
-        ret = snprintf( p, n, "%s", desc );
+        ret = rtl_snprintf( p, n, "%s", desc );
     SAFE_SNPRINTF();
 
 #if defined(POLARSSL_X509_RSASSA_PSS_SUPPORT)
@@ -864,7 +864,7 @@ int x509_sig_alg_gets( char *buf, size_t size, const x509_buf *sig_oid,
         md_info = md_info_from_type( md_alg );
         mgf_md_info = md_info_from_type( pss_opts->mgf1_hash_id );
 
-        ret = snprintf( p, n, " (%s, MGF1-%s, 0x%02X)",
+        ret = rtl_snprintf( p, n, " (%s, MGF1-%s, 0x%02X)",
                               md_info ? md_info->name : "???",
                               mgf_md_info ? mgf_md_info->name : "???",
                               pss_opts->expected_salt_len );
@@ -891,7 +891,7 @@ int x509_key_size_helper( char *buf, size_t size, const char *name )
     if( strlen( name ) + sizeof( " key size" ) > size )
         return( POLARSSL_ERR_DEBUG_BUF_TOO_SMALL );
 
-    ret = snprintf( p, n, "%s key size", name );
+    ret = rtl_snprintf( p, n, "%s key size", name );
     SAFE_SNPRINTF();
 
     return( 0 );

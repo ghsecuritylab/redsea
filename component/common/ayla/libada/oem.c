@@ -99,7 +99,7 @@ enum conf_error oem_set_key(char *key, size_t key_len, const char *model)
 		return CONF_ERR_RANGE;
 	}
 	memcpy(buf, key, len);
-	len += snprintf(buf + len, sizeof(buf) - 1 - len, " %s %s", oem, model);
+	len += rtl_snprintf(buf + len, sizeof(buf) - 1 - len, " %s %s", oem, model);
 	buf[len] = '\0';
 
 	pub_key_len = adap_conf_pub_key_get(pub_key, sizeof(pub_key));
@@ -267,7 +267,7 @@ static int ada_conf_oem_set_string(char *dest, char *src)
 		printcli("error: invalid value");
 		return -1;
 	}
-	len = snprintf(dest, CONF_OEM_MAX + 1, "%s", src);
+	len = rtl_snprintf(dest, CONF_OEM_MAX + 1, "%s", src);
 	if (len > CONF_OEM_MAX) {
 		printcli("error: value too long");
 		return -1;
@@ -327,7 +327,7 @@ void ada_conf_oem_cli(int argc, char **argv)
 			printcli("error: value too long");
 			return;
 		}
-		snprintf(oem_host_version, CONF_OEM_VER_MAX, "%s", argv[2]);
+		rtl_snprintf(oem_host_version, CONF_OEM_VER_MAX, "%s", argv[2]);
 		oem_host_version_sent = 0;
 		gpio_host_ver_send();
 		return;

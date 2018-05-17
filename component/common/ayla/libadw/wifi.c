@@ -383,7 +383,7 @@ static void adw_wifi_hist_log(struct adw_state *wifi,
 		return;
 	}
 	prof = &wifi->profile[wifi->curr_profile];
-	snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
+	rtl_snprintf(wifi->err_buf, sizeof(wifi->err_buf) - 1,
 	    "Wi-Fi connect to %s: %s",
 	    adw_format_ssid(&prof->ssid, ssid_buf, sizeof(ssid_buf)),
 	    adw_wifi_errors[hist->error]);

@@ -28,7 +28,9 @@
 #define CONFIG_INTERACTIVE_MODE     1
 #endif
 
-#define STACKSIZE                   (512 + 768)
+// add by herry
+#define STACKSIZE                   512
+//#define STACKSIZE                   (512 + 768)
 
 xSemaphoreHandle uart_rx_interrupt_sema = NULL;
 
@@ -37,26 +39,27 @@ void ayla_wlan_init(void);
 
 void init_thread(void *param)
 {
-
 #if CONFIG_INIT_NET
 #if CONFIG_LWIP_LAYER
 	/* Initilaize the LwIP stack */
 	LwIP_Init();
 #endif
+PRINTF("\n\r[cs] %s %d available heap %d\n\r", __func__, __LINE__, xPortGetFreeHeapSize());
 #endif
-#if CONFIG_WIFI_IND_USE_THREAD
-	wifi_manager_init();
+#if CONFIG_WIFI_IND_USE_THREAD	// 0
+	wifi_manager_init();		
 #endif
-        ayla_wlan_init();
-#if CONFIG_WLAN
+	ayla_wlan_init();
+
+#if CONFIG_WLAN		// 1
 	wifi_on(RTW_MODE_STA);
-#if CONFIG_AUTO_RECONNECT
+#if CONFIG_AUTO_RECONNECT	// 1
 	//setup reconnection flag
 	wifi_set_autoreconnect(1);
 #endif
-	printf("\n\r%s(%d), Available heap 0x%x", __FUNCTION__, __LINE__, xPortGetFreeHeapSize());	
+	printf("\n\r%s(%d), Available heap %d", __FUNCTION__, __LINE__, xPortGetFreeHeapSize());	
 #endif
-
+	
 #if CONFIG_INTERACTIVE_MODE
  	/* Initial uart rx swmaphore*/
 	vSemaphoreCreateBinary(uart_rx_interrupt_sema);
@@ -64,12 +67,17 @@ void init_thread(void *param)
 	start_interactive_mode();
 #endif	
 
-	printf("\n");
+	PRINTF("\n\r[cs] %s %d available heap %d\n\r", __func__, __LINE__, xPortGetFreeHeapSize());
+
 	ayla_demo_init();
+	
+	PRINTF("\n\r[cs] %s %d available heap %d\n\r", __func__, __LINE__, xPortGetFreeHeapSize());
+	PRINTF("\n\r-------------------------------\n\r\n\r\n\r\n\r");
 
 	/* Kill init thread after all init tasks done */
 	vTaskDelete(NULL);
 }
+
 
 void wlan_network()
 {

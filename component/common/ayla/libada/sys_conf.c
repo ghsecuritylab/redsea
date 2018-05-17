@@ -125,7 +125,7 @@ conf_sys_id_set(int src, enum conf_token *token, size_t len,
 		 * Workaround for first SPIL prototype with old ID set in OTP.
 		 */
 		if (!strcmp(conf_sys_model, "SPIL1")) {
-			snprintf(conf_sys_model,
+			rtl_snprintf(conf_sys_model,
 			    sizeof(conf_sys_model) - 1, "%s", "AY001MSL1");
 		}
 #endif /* PLATFORM_AY001MSL */

@@ -1228,7 +1228,7 @@ void adw_wifi_cli(int argc, char **argv)
 		if (!strcmp(name, "ssid-mac") &&
 		    mfg_profile == ADW_WIFI_PROF_AP) {
 			mac = conf_sys_mac_addr;
-			snprintf(ssid_buf, sizeof(ssid_buf) - 1,
+			rtl_snprintf(ssid_buf, sizeof(ssid_buf) - 1,
 			    "%s%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x", value,
 			    mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 			value = ssid_buf;
@@ -1716,5 +1716,5 @@ void adw_wifi_ap_ssid_set(const char *ssid)
 
 void adw_wifi_ios_setup_app_set(const char *app)
 {
-	snprintf(adw_wifi_ios_app, sizeof(adw_wifi_ios_app), "%s", app);
+	rtl_snprintf(adw_wifi_ios_app, sizeof(adw_wifi_ios_app), "%s", app);
 }

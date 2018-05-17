@@ -70,7 +70,9 @@ void demo_time_cmd(int argc, char **argv)
 
 	if (argc == 1) {
 		clock_fmt(buf, sizeof(buf), clock_utc());
+		//add by herry
 		printcli("%s  %lu ms since boot", buf, clock_ms());
+		//printcli("%s  %d ms since boot", buf, clock_ms());
 		return;
 	}
 	if (argc != 2) {
@@ -186,7 +188,7 @@ void ayla_demo_init(void)
 	int rc;
 	demo_init();
 
-#ifdef AYLA_WIFI_SUPPORT
+#ifdef AYLA_WIFI_SUPPORT	// 1
 	demo_wifi_init();
 #endif
 

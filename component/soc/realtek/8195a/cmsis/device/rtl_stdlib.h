@@ -28,9 +28,16 @@
 //
 // standard i/o
 //
+// add by herry
+#if 0
 #define snprintf							DiagSnPrintf
 #define sprintf							prvDiagSPrintf
 #define printf 							prvDiagPrintf
+#else
+#define snprintf						rtl_snprintf
+#define sprintf							rtl_sprintf
+#define printf 							rtl_printf
+#endif
 
 //
 // memory management

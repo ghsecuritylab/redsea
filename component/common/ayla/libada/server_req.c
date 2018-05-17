@@ -275,6 +275,7 @@ void server_req(struct server_req *req)
 	u8 priv;
 	int rc;
 
+
 #ifdef ENABLE_HTTP_HEADER_PARSE
 	if (req->state == REQ_INIT) {
 		line = server_get_line(req, buf, sizeof(buf));
@@ -403,6 +404,9 @@ void server_req(struct server_req *req)
 			goto error;
 		}
 		req->content_len = 0;
+
+		server_log(LOG_WARN "recv2: %s\n", req->resource);		//add by herry
+
 		if (!server_req_header(req, "Content-Length", buf,
 		    sizeof(buf))) {
 			len = strtoul(buf, &endptr, 10);
@@ -410,7 +414,7 @@ void server_req(struct server_req *req)
 				server_log(LOG_WARN "req: "
 				   "invalid clen '%s'\n", buf);
 				msg = "invalid clen";
-				goto error;
+				//goto error;		//add by herry
 			}
 			req->content_len = len;
 		}
@@ -546,7 +550,7 @@ const struct url_list *server_find_handler(struct server_req *req,
 		method = REQ_GET;	/* find the GET handler */
 	}
 	if (url != req->resource) {
-		snprintf(req->resource, sizeof(req->resource) - 1, "%s", url);
+		rtl_snprintf(req->resource, sizeof(req->resource) - 1, "%s", url);
 	}
 
 	url_end = strchr(url, '?');

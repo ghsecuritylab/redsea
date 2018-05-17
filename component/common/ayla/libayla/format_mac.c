@@ -19,7 +19,7 @@
  */
 char *format_mac(const u8 *mac, char *buf, size_t buf_len)
 {
-	snprintf(buf, buf_len, "%2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x",
+	rtl_snprintf(buf, buf_len, "%2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x",
 	    mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 	return buf;
 }

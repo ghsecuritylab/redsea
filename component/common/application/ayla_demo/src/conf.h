@@ -18,7 +18,8 @@
  * If these are changed, the encrypted OEM secret must be re-encrypted
  * unless the oem_model "*" (wild-card) when the oem_key was encrypted.
  */
-#define DEMO_OEM_ID	"0dfc7900"	/* replace with your Ayla OEM ID */
+//#define DEMO_OEM_ID	"0dfc7900"	/* replace with your Ayla OEM ID */
+#define DEMO_OEM_ID	"e04429fc"	/* chipsea Ayla OEM ID */
 #define DEMO_LEDEVB_MODEL "ledevb"
 #define DEMO_OUTLET_MODEL "smartplug1"
 

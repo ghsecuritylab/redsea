@@ -86,7 +86,7 @@ esc:
 				json_set_if_not_null(buflim_reached, 1);
 				return 0;
 			}
-			used = snprintf(*dest, *buf_len, "\\u%4.4x", c);
+			used = rtl_snprintf(*dest, *buf_len, "\\u%4.4x", c);
 			(*buf_len) -= used;
 			(*dest) += used;
 			break;

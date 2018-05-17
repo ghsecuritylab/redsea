@@ -3503,7 +3503,7 @@ TCB_t *pxTCB;
 		 * and limited functionality implementation of sprintf() is provided in
 		 * many of the FreeRTOS/Demo sub-directories in a file called
 		 * printf-stdarg.c (note printf-stdarg.c does not provide a full
-		 * snprintf() implementation!).
+		 * rtl_snprintf() implementation!).
 		 *
 		 * It is recommended that production systems call uxTaskGetSystemState()
 		 * directly to get access to raw stats data, rather than indirectly
@@ -3597,7 +3597,7 @@ TCB_t *pxTCB;
 		 * tiny, third party, and limited functionality implementation of
 		 * sprintf() is provided in many of the FreeRTOS/Demo sub-directories in
 		 * a file called printf-stdarg.c (note printf-stdarg.c does not provide
-		 * a full snprintf() implementation!).
+		 * a full rtl_snprintf() implementation!).
 		 *
 		 * It is recommended that production systems call uxTaskGetSystemState()
 		 * directly to get access to raw stats data, rather than indirectly

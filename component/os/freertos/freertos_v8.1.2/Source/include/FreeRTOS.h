@@ -66,6 +66,9 @@
 #ifndef INC_FREERTOS_H
 #define INC_FREERTOS_H
 
+// Add by herry
+#define PRINTF printf
+
 /*
  * Include the generic headers required for the FreeRTOS port being used.
  */

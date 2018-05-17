@@ -58,7 +58,7 @@ int client_prop_name(struct xml_state *sp, int argc, char **argv)
 	struct prop_recvd *prop = &prop_recvd;
 
 	if (argc == 1) {
-		snprintf(prop->name, sizeof(prop->name) - 1, "%s",
+		rtl_snprintf(prop->name, sizeof(prop->name) - 1, "%s",
 		    argv[0]);
 	}
 	return 0;
@@ -312,7 +312,7 @@ enum ada_err client_get_prop_val(const char *name)
 	if (!name || name[0] == '\0') {
 		hc->client_tcp_recv_cb = client_recv_prop_cmds;
 		state->request = CS_GET_ALL_VALS;
-		snprintf(uri, sizeof(uri),
+		rtl_snprintf(uri, sizeof(uri),
 		    "/devices/%s/commands.xml?input=true",
 		    state->client_key);
 
@@ -320,7 +320,7 @@ enum ada_err client_get_prop_val(const char *name)
 	} else {
 		hc->client_tcp_recv_cb = client_recv_prop_val;
 		state->request = CS_GET_VAL;
-		snprintf(uri, sizeof(uri),
+		rtl_snprintf(uri, sizeof(uri),
 		    "/devices/%s/properties/%s.xml",
 		    state->client_key, name);
 

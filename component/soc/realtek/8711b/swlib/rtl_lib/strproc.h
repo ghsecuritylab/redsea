@@ -99,11 +99,27 @@ static inline int isodigit(const char c)
 {
     return c >= '0' && c <= '7';
 }
+
+//add by herry
+#if 0
 #ifndef strtoul
 #define strtoul(str, endp, base)       simple_strtoul(str, endp, base)
 #endif
 #ifndef strtol
 #define strtol(str, endp, base)        simple_strtol(str, endp, base)
 #endif
+#else
+
+extern unsigned long my_strtoul(const char *str, char **endp, unsigned int base);
+extern long my_strtol(const char *str, char **endp, unsigned int base);
+
+#ifndef strtoul
+#define strtoul(str, endp, base)       my_strtoul(str, endp, base)
+#endif
+#ifndef strtol
+#define strtol(str, endp, base)        my_strtol(str, endp, base)
+#endif
+#endif
 
 #endif
+

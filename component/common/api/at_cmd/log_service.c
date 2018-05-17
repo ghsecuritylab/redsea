@@ -86,6 +86,7 @@ extern unsigned int __log_init_begin__;
 extern unsigned int __log_init_end__;
 #endif
 
+
 #if defined(__GNUC__)
 #define USE_STRSEP
 #endif
@@ -183,6 +184,7 @@ void* log_handler(char *cmd)
 	char *token = NULL;
 	char *param = NULL;
 	char tok[16] = {0};//'\0'
+
 #if CONFIG_LOG_HISTORY
 	strcpy(log_history[((log_history_count++)%LOG_HISTORY_LEN)], log_buf);
 #endif
@@ -195,14 +197,13 @@ void* log_handler(char *cmd)
 	token = strtok(copy, " =");
 	param = strtok(NULL, NULL);
 #endif
+
 	if(token && (strlen(token) <= sizeof(tok)-1))
 		strcpy(tok, token);
 	else{
-		//printf("\n\rAT Cmd format error!\n");
+		PRINTF("\n\rAT Cmd format error!\n");
 		return NULL;
 	};
-	//printf(" Command %s \n\r ", tok);
-	//printf(" Param %s \n\r", param);
 	action = (log_act_t)log_action(tok);
         
 	if(action){	
@@ -329,12 +330,12 @@ int mp_commnad_handler(char *cmd)
 }
 #endif
 void print_help_msg(void){
- /*
+ 
 #if CONFIG_WLAN
-extern void print_wlan_help(void);
-        print_wlan_help();
+/*extern void print_wlan_help(void);
+        print_wlan_help();*/
 #endif
-*/
+
 //add other help message print here
  extern void print_ayla_cli_help(void);
         print_ayla_cli_help();
@@ -371,7 +372,7 @@ void log_service_lock_init(void){
 
 void log_service(void *param)
 {
-	_AT_DBG_MSG(AT_FLAG_COMMON, AT_DBG_ALWAYS, "\n\rStart LOG SERVICE MODE\n\r");
+//	_AT_DBG_MSG(AT_FLAG_COMMON, AT_DBG_ALWAYS, "\n\rStart LOG SERVICE MODE\n\r");
 	_AT_DBG_MSG(AT_FLAG_COMMON, AT_DBG_ALWAYS, "\n\r# ");        
 	while(1){
 		while(xSemaphoreTake(log_rx_interrupt_sema, portMAX_DELAY) != pdTRUE);

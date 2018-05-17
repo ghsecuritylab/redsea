@@ -31,10 +31,21 @@ void *ayla_calloc(size_t count, size_t size);
 #define free os_mem_free
 #define calloc ayla_calloc
 
+#if 0
 static inline void *ayla_calloc(size_t count, size_t size)
 {
-	return os_mem_calloc(count * size);
+	unsigned char *p;
+
+	PRINTF("\n\r[cs] 2 available heap %d\n\r", xPortGetFreeHeapSize());
+
+	p = os_mem_calloc(count * size);
+	if (p == NULL){
+		printf("[cs] malloc failed!\r\n");
+	}
+	return (void *)p;
 }
+#endif // 0
+
 #endif /* WMSDK */
 
 #endif /* __AYLA_MALLOC_H__ */

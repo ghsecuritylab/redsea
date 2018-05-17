@@ -792,7 +792,7 @@ int wifi_set_mac_address(char * mac)
 {
 	char buf[13+17+1];
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 13+17, "write_mac %s", mac);
+	rtl_snprintf(buf, 13+17, "write_mac %s", mac);
 	return wext_private_command(WLAN0_NAME, buf, 0);
 }
 
@@ -839,7 +839,7 @@ int wifi_set_txpower(int poweridx)
 	char buf[24];
 	
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 24, "txpower patha=%d", poweridx);
+	rtl_snprintf(buf, 24, "txpower patha=%d", poweridx);
 	ret = wext_private_command(WLAN0_NAME, buf, 0);
 
 	return ret;
@@ -858,7 +858,7 @@ int wifi_get_associated_client_list(void * client_list_buffer, uint16_t buffer_l
 	}
 
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 25, "get_client_list %x", client_list_buffer);
+	rtl_snprintf(buf, 25, "get_client_list %x", client_list_buffer);
 	ret = wext_private_command(ifname, buf, 0);
 
 	return ret;
@@ -886,10 +886,10 @@ int wifi_get_ap_info(rtw_bss_info_t * ap_info, rtw_security_t* security)
 	}
 
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 24, "get_ap_info %x", ap_info);
+	rtl_snprintf(buf, 24, "get_ap_info %x", ap_info);
 	ret = wext_private_command(ifname, buf, 0);
 
-	snprintf(buf, 24, "get_security");
+	rtl_snprintf(buf, 24, "get_security");
 	ret = wext_private_command_with_retval(ifname, buf, buf, 24);
 	sscanf(buf, "%d", security);
 
@@ -919,7 +919,7 @@ int wifi_set_channel_plan(uint8_t channel_plan)
 	char buf[24];
 	
 	rtw_memset(buf, 0, sizeof(buf));
-	snprintf(buf, 24, "set_ch_plan %x", channel_plan);
+	rtl_snprintf(buf, 24, "set_ch_plan %x", channel_plan);
 	ret = wext_private_command(ifname, buf, 0);
 	return ret;
 }

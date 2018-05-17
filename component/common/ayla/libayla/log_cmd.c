@@ -12,6 +12,7 @@
 #include <ayla/utypes.h>
 #include <ayla/log.h>
 
+
 static void log_show(const char *name, u32 log_mask)
 {
 	printcli("logging %10s: %s%s%s%s%s%s%s%s%s",

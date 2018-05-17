@@ -111,7 +111,7 @@ static void log_client_start(struct log_client_state *state)
 		return;
 	}
 
-	hc->body_buf_len = snprintf(state->buf, sizeof(state->buf),
+	hc->body_buf_len = rtl_snprintf(state->buf, sizeof(state->buf),
 	    "{\"dsn\":\"%s\", \"logs\":[", conf_sys_dev_id);
 	hc->body_buf = state->buf;
 	hc->body_len = LOG_SIZE;	/* fixed size of output */
@@ -228,9 +228,9 @@ static size_t log_client_json_log(struct log_msg_head *head,
 
 	line_ptr = json_format_string(line, sizeof(line), msg, head->len, 1);
 	if (!line_ptr) {
-		snprintf(line, sizeof(line), "--- line encoding too long ---");
+		rtl_snprintf(line, sizeof(line), "--- line encoding too long ---");
 	}
-	snprintf(json_msg, sizeof(line),
+	rtl_snprintf(json_msg, sizeof(line),
 	    "%s{\"time\":\"%lu\",\"mod\":\"%s\","
 	    "\"level\":\"%s\", \"text\":\"%s\"}",
 	    (comma_needed) ? "," : "", head->time,
@@ -526,7 +526,7 @@ void log_client_set(const char *host, char *uri, const char *protocol)
 	if (host[0] == '\0') {
 		return;
 	}
-	snprintf(hc->host, sizeof(hc->host), "%s", host);
+	rtl_snprintf(hc->host, sizeof(hc->host), "%s", host);
 
 	state->uri = uri;
 	hc->ssl_enable = (strcmp(protocol, "http") != 0);

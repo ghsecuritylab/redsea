@@ -652,7 +652,7 @@ int client_ota_fetch_image(struct client_state *state)
 		hc = client_req_new(CCT_IMAGE_SERVER);
 		client_log(LOG_DEBUG "OTA get from %s %lu-%lu", hc->host,
 		    off, off + cnt);
-		snprintf(range, sizeof(range), "bytes=%lu-%lu", off, off + cnt);
+		rtl_snprintf(range, sizeof(range), "bytes=%lu-%lu", off, off + cnt);
 		hdr = &range_hdr;
 	}
 	ASSERT(hc);
@@ -701,14 +701,14 @@ int client_put_ota_status(struct client_state *state)
 	state->conn_state = CS_WAIT_OTA_PUT;
 	state->request = CS_PUT_OTA;
 
-	hc->body_len = snprintf(state->xml_buf, sizeof(state->xml_buf) - 1,
+	hc->body_len = rtl_snprintf(state->xml_buf, sizeof(state->xml_buf) - 1,
 	    "{\"ota-status\":{\"status\":%u,\"type\":\"%s\"}}",
 	    state->ota_status.status,
 	    state->ota_status.type == OTA_HOST ? "host_mcu" : "module");
 	hc->body_buf = state->xml_buf;
 	hc->body_buf_len = hc->body_len;
 
-	snprintf(uri, sizeof(uri), "/devices/%s/ota_failed.json",
+	rtl_snprintf(uri, sizeof(uri), "/devices/%s/ota_failed.json",
 	    state->client_key);
 
 	client_req_start(hc, HTTP_REQ_PUT, uri, &http_hdr_content_json);
@@ -858,7 +858,7 @@ static int client_ota_json_parse(char *post_data)
 
 	tmp_len = jsmn_get_string(&parser, parent, "type", type, sizeof(type));
 	if (tmp_len <= 0 || !strcasecmp(type, "module")) {
-		snprintf(type, sizeof(type), "module");
+		rtl_snprintf(type, sizeof(type), "module");
 	} else if (!strcasecmp(type, "host_mcu")) {
 		ota_type = OTA_HOST;
 	} else {
@@ -939,7 +939,7 @@ static int client_ota_json_parse(char *post_data)
 		state->ota_server.uri = calloc(MAX_S3_URL_LEN, sizeof(char));
 		ASSERT(state->ota_server.uri);
 	}
-	snprintf(state->ota_server.uri, MAX_S3_URL_LEN, "/%s", path);
+	rtl_snprintf(state->ota_server.uri, MAX_S3_URL_LEN, "/%s", path);
 
 	state->ota.off = 0;
 	state->ota.max_off = image_len;

@@ -231,7 +231,7 @@ static void http_client_parse_key(struct http_state *sp, int argc,
 	size_t len;
 
 	if (argc >= 1) {
-		len = snprintf(hc->auth_hdr, sizeof(hc->auth_hdr),
+		len = rtl_snprintf(hc->auth_hdr, sizeof(hc->auth_hdr),
 		    HTTP_CLIENT_AUTH_VER " %s", argv[0]);
 		if (len >= sizeof(hc->auth_hdr)) {
 			HTTP_CLIENT_LOGF(hc, LOG_WARN, "auth hdr too long");
@@ -249,7 +249,9 @@ static void http_client_parse_time(struct http_state *sp, int argc,
 
 	if (argc >= 1) {
 		server_time = strtoul(argv[0], &errptr, 10);
-		if (*errptr != '\0' || server_time >= MAX_U32) {
+		printf("[cs] %s, %d, %d\r\n", argv[0], *errptr, server_time);		//add by herry
+		if (server_time >= MAX_U32) {
+		//if (*errptr != '\0' || server_time >= MAX_U32) {
 			HTTP_CLIENT_LOGF(hc, LOG_WARN, "bad time %s", argv[0]);
 			return;
 		}
@@ -1201,18 +1203,18 @@ void http_client_req(struct http_client *hc, enum http_method method,
 		ASSERT_NOTREACHED();
 	}
 
-	len = snprintf(hc->req_buf, sizeof(hc->req_buf),
+	len = rtl_snprintf(hc->req_buf, sizeof(hc->req_buf),
 	    "%s %s HTTP/1.1\r\n"
 	    "Host: %s\r\n",
 	    method_str, resource, hc->host);
 
 	if (!hc->sending_chunked) {		/* never chunked for now */
-		len += snprintf(hc->req_buf + len, sizeof(hc->req_buf) - len,
+		len += rtl_snprintf(hc->req_buf + len, sizeof(hc->req_buf) - len,
 		    "Content-Length: %u\r\n", hc->body_len);
 	}
 
 	for (i = 0; i < hcnt; i++) {
-		len += snprintf(hc->req_buf + len, sizeof(hc->req_buf) - len,
+		len += rtl_snprintf(hc->req_buf + len, sizeof(hc->req_buf) - len,
 		    "%s: %s\r\n",
 		    hdrs[i].name, hdrs[i].val);
 	}

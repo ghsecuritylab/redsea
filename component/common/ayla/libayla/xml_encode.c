@@ -80,7 +80,7 @@ xml_encode(char *dest, size_t dest_len, const char *src, size_t src_len,
 			esc = "&apos;";
 			elen = 6;
 		} else if (c < 0x20) {
-			elen = snprintf(buf, sizeof(buf) - 1, "&#%u;", c);
+			elen = rtl_snprintf(buf, sizeof(buf) - 1, "&#%u;", c);
 			esc = buf;
 		} else if (c <= 0x7f) {
 			if (xml_add_to_dest(&dest, &dest_len, &len, c)) {

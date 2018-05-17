@@ -6,7 +6,10 @@
 #define strncpy		_strncpy
 #define strnlen		_strnlen
 #define strlen		_strlen
-#define snprintf	DiagSnPrintf
+
+//add by herry
+//#define snprintf	DiagSnPrintf
+#define snprintf	rtl_snprintf
 
 #define strstr		__rtl_strstr
 #define memmove		__rtl_memmove
