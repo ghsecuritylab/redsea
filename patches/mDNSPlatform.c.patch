@@ -1,0 +1,21 @@
+--- a/component/common/network/mDNS/mDNSPlatform.c	2017-11-17 13:22:05.835591100 +0800
++++ b/component/common/network/mDNS/mDNSPlatform.c	2017-11-17 13:50:56.177178200 +0800
+@@ -23,15 +23,13 @@
+ 	return inet_addr(cp);
+ }
+ 
++extern char conf_sys_dev_id[];
++
+ // Mandatory function to get hostname
+ // called when mDNS initialization
+ char *mDNSPlatformHostname(void)
+ {
+-#if LWIP_NETIF_HOSTNAME
+-	return xnetif[0].hostname;
+-#else
+-	return "ameba";
+-#endif
++	return conf_sys_dev_id;
+ }
+ 
+ /*-----------------------------------------------------------------------*/

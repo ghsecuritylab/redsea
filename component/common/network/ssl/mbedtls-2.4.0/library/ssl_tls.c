@@ -277,7 +277,7 @@ static int tls1_prf( const unsigned char *secret, size_t slen,
 {
     size_t nb, hs;
     size_t i, j, k;
-    const unsigned char *S1, *S2;
+    const unsigned char *s1, *s2;
     unsigned char tmp[128];
     unsigned char h_i[20];
     const mbedtls_md_info_t *md_info;
@@ -290,8 +290,8 @@ static int tls1_prf( const unsigned char *secret, size_t slen,
         return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
 
     hs = ( slen + 1 ) / 2;
-    S1 = secret;
-    S2 = secret + slen - hs;
+    s1 = secret;
+    s2 = secret + slen - hs;
 
     nb = strlen( label );
     memcpy( tmp + 20, label, nb );
@@ -307,7 +307,7 @@ static int tls1_prf( const unsigned char *secret, size_t slen,
     if( ( ret = mbedtls_md_setup( &md_ctx, md_info, 1 ) ) != 0 )
         return( ret );
 
-    mbedtls_md_hmac_starts( &md_ctx, S1, hs );
+    mbedtls_md_hmac_starts( &md_ctx, s1, hs );
     mbedtls_md_hmac_update( &md_ctx, tmp + 20, nb );
     mbedtls_md_hmac_finish( &md_ctx, 4 + tmp );
 
@@ -338,7 +338,7 @@ static int tls1_prf( const unsigned char *secret, size_t slen,
     if( ( ret = mbedtls_md_setup( &md_ctx, md_info, 1 ) ) != 0 )
         return( ret );
 
-    mbedtls_md_hmac_starts( &md_ctx, S2, hs );
+    mbedtls_md_hmac_starts( &md_ctx, s2, hs );
     mbedtls_md_hmac_update( &md_ctx, tmp + 20, nb );
     mbedtls_md_hmac_finish( &md_ctx, tmp );
 

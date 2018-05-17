@@ -50,9 +50,9 @@
 /**
 * For common flash usage  
 */
-#define AP_SETTING_SECTOR		0x000FE000
-#define UART_SETTING_SECTOR		0x000FC000
-#define FAST_RECONNECT_DATA 	(0x80000 - 0x1000)
+#define AP_SETTING_SECTOR      0x000F6000
+#define UART_SETTING_SECTOR        0x000F4000
+#define FAST_RECONNECT_DATA        0x000F3000
 #define FLASH_SECTOR_SIZE       0x1000
 
 /**
@@ -99,8 +99,8 @@
 #endif
 
 /* For SSL/TLS */
-#define CONFIG_USE_POLARSSL     1
-#define CONFIG_USE_MBEDTLS      0
+#define CONFIG_USE_POLARSSL     0
+#define CONFIG_USE_MBEDTLS      1
 #if ((CONFIG_USE_POLARSSL == 0) && (CONFIG_USE_MBEDTLS == 0)) || ((CONFIG_USE_POLARSSL == 1) && (CONFIG_USE_MBEDTLS == 1))
 #undef CONFIG_USE_POLARSSL
 #define CONFIG_USE_POLARSSL 1
@@ -112,7 +112,7 @@
 #define CONFIG_INCLUDE_SIMPLE_CONFIG		1
 
 /*For fast reconnection*/
-#define CONFIG_EXAMPLE_WLAN_FAST_CONNECT	1
+#define CONFIG_EXAMPLE_WLAN_FAST_CONNECT	0
 
 /*For wowlan service settings*/
 #define CONFIG_WOWLAN_SERVICE           			0

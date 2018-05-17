@@ -105,7 +105,7 @@ uint32_t update_ota_prepare_addr(void){
 	uint32_t IMAGE_x = 0, ImgxLen = 0, ImgxAddr = 0;
 	uint32_t NewImg2Addr = 0; 
 #if WRITE_OTA_ADDR
-	uint32_t ota_addr = 0x80000;
+	uint32_t ota_addr = 0x100000;
 #endif
 	
 	DBG_INFO_MSG_OFF(_DBG_SPI_FLASH_);

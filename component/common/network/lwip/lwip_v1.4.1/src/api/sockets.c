@@ -2556,5 +2556,14 @@ void lwip_selectevindicate(int fd)
 /**************************************************************
 *                           Added  by Realtek        end                    *
 **************************************************************/
+struct tcp_pcb *sock_get_pcb(int s)
+{
+    struct lwip_sock *sock;
 
+    sock = tryget_socket(s);
+    if (!sock) {
+      return NULL;
+    }
+    return (struct tcp_pcb *)sock->conn->pcb.tcp;
+}
 #endif /* LWIP_SOCKET */

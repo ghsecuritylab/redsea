@@ -27,7 +27,7 @@ void main(void)
 #endif
 
 	/* Execute application example */
-	example_entry();
+	//example_entry();
 
     	/*Enable Schedule, Start Kernel*/
 #if defined(CONFIG_KERNEL) && !TASK_SCHEDULER_DISABLED

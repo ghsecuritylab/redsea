@@ -1,0 +1,11 @@
+--- a/component/common/mbed/targets/hal/rtl8195a/sys_api.c	2017-11-17 13:22:05.554341100 +0800
++++ b/component/common/mbed/targets/hal/rtl8195a/sys_api.c	2017-11-17 13:50:53.442803200 +0800
+@@ -25,7 +25,7 @@
+ #define OTA_Clear				"00000000"
+ #define OTA_Signature_len		8
+ #define OTA_Signature_offset	8
+-#define OTA_valid_offset		0x100000
++#define OTA_valid_offset		0x200000
+ #undef printf
+ #define printf					DiagPrintf
+ 

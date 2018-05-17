@@ -68,7 +68,7 @@ int platform_set_malloc_free( void * (*malloc_func)( size_t ),
 	rom_ssl_ram_map.hw_crypto_3des_cbc_encrypt = rtl_crypto_3des_cbc_encrypt;
 
 	/* Variables */
-	rom_ssl_ram_map.use_hw_crypto_func = 1;
+	rom_ssl_ram_map.use_hw_crypto_func = 0;
 
 	return 0;
 }

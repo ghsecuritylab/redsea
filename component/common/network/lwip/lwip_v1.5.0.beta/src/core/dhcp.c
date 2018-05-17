@@ -928,6 +928,12 @@ dhcp_discover(struct netif *netif)
   return result;
 }
 
+static void (*dhcp_bound_fn)(int interface, ip_addr_t *ipaddr);
+void dhcp_set_bound_handler(void (*handler)(int, ip_addr_t *))
+{
+	dhcp_bound_fn = handler;
+}
+
 
 /**
  * Bind the interface to the offered IP address.
@@ -1020,6 +1026,8 @@ dhcp_bind(struct netif *netif)
   netif_set_gw(netif, &gw_addr);
   /* bring the interface up */
   netif_set_up(netif);
+  if (dhcp_bound_fn)
+    dhcp_bound_fn(netif->num, &dhcp->offered_ip_addr);
   /* netif is now bound to DHCP leased address */
   dhcp_set_state(dhcp, DHCP_BOUND);
 }

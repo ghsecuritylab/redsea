@@ -506,7 +506,7 @@ static int pk_get_ecpubkey( unsigned char **p, const unsigned char *end,
  *      publicExponent    INTEGER   -- e
  *  }
  */
-static int pk_get_rsapubkey( unsigned char **p,
+int pk_get_rsapubkey( unsigned char **p,
                              const unsigned char *end,
                              mbedtls_rsa_context *rsa )
 {

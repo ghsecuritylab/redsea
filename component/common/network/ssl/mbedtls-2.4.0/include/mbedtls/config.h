@@ -2,7 +2,9 @@
 
 #include "rom_ssl_ram_map.h"
 #define RTL_HW_CRYPTO
-//#define SUPPORT_HW_SW_CRYPTO
+#define SUPPORT_HW_SW_CRYPTO
+#define MBEDTLS_PADLOCK_C
+#define MBEDTLS_HAVE_ASM
 #define RTL_CRYPTO_FRAGMENT               15360 /* 15*1024 < 16000 */
 
 #if CONFIG_SSL_RSA

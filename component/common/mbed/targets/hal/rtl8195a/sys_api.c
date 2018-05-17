@@ -25,7 +25,7 @@
 #define OTA_Clear				"00000000"
 #define OTA_Signature_len		8
 #define OTA_Signature_offset	8
-#define OTA_valid_offset		0x100000
+#define OTA_valid_offset		0x200000
 #undef printf
 #define printf					DiagPrintf
 

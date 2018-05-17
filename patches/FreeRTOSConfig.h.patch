@@ -1,0 +1,11 @@
+--- a/project/realtek_ameba1_va0_example/inc/FreeRTOSConfig.h	2017-11-17 13:22:06.507466100 +0800
++++ b/project/realtek_ameba1_va0_example/inc/FreeRTOSConfig.h	2017-11-17 13:51:01.688896900 +0800
+@@ -94,7 +94,7 @@
+ #ifdef CONFIG_UVC
+ #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 110 * 1024 ) )	// use HEAP5
+ #else
+-#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 60 * 1024 ) )	// use HEAP5
++#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 80 * 1024 ) )	// use HEAP5
+ #endif
+ #define configMAX_TASK_NAME_LEN			( 10 )
+ #define configUSE_TRACE_FACILITY		0

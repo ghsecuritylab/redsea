@@ -19,6 +19,7 @@
 //======================================================
 struct list_head log_hash[ATC_INDEX_NUM];
 
+extern void at_ayla_cli_init(void);
 extern void at_wifi_init(void);
 extern void at_fs_init(void);
 extern void at_sys_init(void);
@@ -57,6 +58,7 @@ log_init_t* __log_init_begin__;
 log_init_t* __log_init_end__;
 log_init_t log_init_table[] = {
 	at_wifi_init,
+    at_ayla_cli_init,
 	//	at_fs_init,
 
 	at_sys_init,
@@ -180,20 +182,20 @@ void* log_handler(char *cmd)
 	char *copy=buf;
 	char *token = NULL;
 	char *param = NULL;
-	char tok[5] = {0};//'\0'
+	char tok[16] = {0};//'\0'
 #if CONFIG_LOG_HISTORY
 	strcpy(log_history[((log_history_count++)%LOG_HISTORY_LEN)], log_buf);
 #endif
 	strncpy(copy, cmd,LOG_SERVICE_BUFLEN-1);
 
 #if defined(USE_STRSEP)
-	token = _strsep(&copy, "=");
+	token = _strsep(&copy, " =");
 	param = copy;
 #else
-	token = strtok(copy, "=");
+	token = strtok(copy, " =");
 	param = strtok(NULL, NULL);
 #endif
-	if(token && (strlen(token) <= 4))
+	if(token && (strlen(token) <= sizeof(tok)-1))
 		strcpy(tok, token);
 	else{
 		//printf("\n\rAT Cmd format error!\n");
@@ -327,11 +329,15 @@ int mp_commnad_handler(char *cmd)
 }
 #endif
 void print_help_msg(void){
+ /*
 #if CONFIG_WLAN
 extern void print_wlan_help(void);
         print_wlan_help();
 #endif
+*/
 //add other help message print here
+ extern void print_ayla_cli_help(void);
+        print_ayla_cli_help();
 }
 
 int print_help_handler(char *cmd){

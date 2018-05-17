@@ -181,7 +181,7 @@ HeapRegion_t xHeapRegions[] =
 {
 	{ (uint8_t*)0x10002300, 0x3D00 },	// Image1 recycle heap
 	{ ucHeap, sizeof(ucHeap) }, 		// Defines a block from ucHeap
-#if 0
+#if 1
 	{ (uint8_t*)0x301b5000, 300*1024 }, // SDRAM heap
 #endif        
 	{ NULL, 0 } 							// Terminates the array.

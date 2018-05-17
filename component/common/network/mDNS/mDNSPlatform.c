@@ -23,6 +23,8 @@ uint32_t mDNSPlatformInetAddr(char *cp)
 	return inet_addr(cp);
 }
 
+extern char conf_sys_dev_id[];
+
 // Mandatory function to get hostname
 // called when mDNS initialization
 char *mDNSPlatformHostname(void)
@@ -32,6 +34,7 @@ char *mDNSPlatformHostname(void)
 #else
 	return "ameba";
 #endif
+    return conf_sys_dev_id;
 }
 
 /*-----------------------------------------------------------------------*/

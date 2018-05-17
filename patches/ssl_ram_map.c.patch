@@ -1,0 +1,11 @@
+--- a/component/common/network/ssl/ssl_ram_map/ssl_ram_map.c	2017-11-17 13:22:06.179341100 +0800
++++ b/component/common/network/ssl/ssl_ram_map/ssl_ram_map.c	2017-11-17 13:50:58.927178200 +0800
+@@ -68,7 +68,7 @@
+ 	rom_ssl_ram_map.hw_crypto_3des_cbc_encrypt = rtl_crypto_3des_cbc_encrypt;
+ 
+ 	/* Variables */
+-	rom_ssl_ram_map.use_hw_crypto_func = 1;
++	rom_ssl_ram_map.use_hw_crypto_func = 0;
+ 
+ 	return 0;
+ }

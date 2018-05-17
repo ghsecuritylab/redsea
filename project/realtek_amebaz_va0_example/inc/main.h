@@ -119,4 +119,10 @@ extern unsigned char ap_ip[4], ap_netmask[4], ap_gw[4];
 #endif //#if ATCMD_VER == ATVER_2
 
 
+#if 1 //add by will
+#define WILL_PRINTF(fmt, ...) printf("==> <%s> (%d) " fmt "\r\n" , __func__, __LINE__, __VA_ARGS__)
+#define WILL_DEBUG() WILL_PRINTF("","")
+#endif
+
+
 #endif

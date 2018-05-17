@@ -329,7 +329,7 @@
  * (only needed if you use the sequential API, like api_lib.c)
  */
 #ifndef MEMP_NUM_NETCONN
-#define MEMP_NUM_NETCONN                8
+#define MEMP_NUM_NETCONN                10
 #endif
 
 /**
@@ -1114,7 +1114,7 @@
  * field.
  */
 #ifndef LWIP_NETIF_HOSTNAME
-#define LWIP_NETIF_HOSTNAME             0
+#define LWIP_NETIF_HOSTNAME             1
 #endif
 
 /**
