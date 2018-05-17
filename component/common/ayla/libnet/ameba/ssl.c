@@ -731,6 +731,7 @@ struct stream_pcb *stream_new(struct stream_ssl_id *sess_id,
 	if (sp->tcp_metric) {
 		sp->tcp_metric->connect_start = time_now();
 	}
+
 	if (sess_id) {
 		sp->enable = 1;
 	}
@@ -749,7 +750,7 @@ struct stream_pcb *stream_new(struct stream_ssl_id *sess_id,
 #endif
 
 	//add by herry
-	//PRINTF("\n\r[MEM] ssl available heap %d\n\r", xPortGetFreeHeapSize());
+	PRINTF("\n\r[MEM] ssl available heap %d\n\r", xPortGetFreeHeapSize());
 
 	if (xTaskCreate(stream_idle,
 	    "A_Stream",

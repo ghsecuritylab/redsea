@@ -87,14 +87,14 @@ extern uint32_t SystemCoreClock;
  *----------------------------------------------------------*/
 
 #define configUSE_PREEMPTION			1
-#define configUSE_IDLE_HOOK				1
+#define configUSE_IDLE_HOOK				0
 #define configUSE_TICK_HOOK				0
 #define configCPU_CLOCK_HZ				( SystemCoreClock )
 #define configTICK_RATE_HZ				( ( uint32_t ) 1000 )
 #define configSYSTICK_CLOCK_HZ			32768
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 512 )
 #ifdef CONFIG_WIFI_EN
-#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 128 * 1024 ) )
+#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 129 * 1024 ) )
 #else
 #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 80 * 1024 ) )
 #endif

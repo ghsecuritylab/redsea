@@ -250,8 +250,7 @@ static void http_client_parse_time(struct http_state *sp, int argc,
 	if (argc >= 1) {
 		server_time = strtoul(argv[0], &errptr, 10);
 		printf("[cs] %s, %d, %d\r\n", argv[0], *errptr, server_time);		//add by herry
-		if (server_time >= MAX_U32) {
-		//if (*errptr != '\0' || server_time >= MAX_U32) {
+		if (*errptr != '\0' || server_time >= MAX_U32) {
 			HTTP_CLIENT_LOGF(hc, LOG_WARN, "bad time %s", argv[0]);
 			return;
 		}
@@ -1271,15 +1270,37 @@ static void http_client_connect(struct http_client *hc)
 	hc->state = HCS_CONN;
 
 	http_client_init_ssltcp_metric(hc);
-	pcb = stream_new(hc->ssl_enable ? &hc->sess_id : NULL,
-	    hc->accept_non_ayla,
-	    ssl_metrics ? ssl_metrics->current : NULL,
-	    tcp_metrics ? tcp_metrics->current : NULL);
-	if (!pcb) {
-		HTTP_CLIENT_LOGF(hc, LOG_WARN, "cannot alloc PCB");
-		http_client_retry(hc);
-		return;
-	}
+
+#if 1//add by will
+    int count=5;
+    while(count--)
+    {
+    	pcb = stream_new(hc->ssl_enable ? &hc->sess_id : NULL,
+    	    hc->accept_non_ayla,
+    	    ssl_metrics ? ssl_metrics->current : NULL,
+    	    tcp_metrics ? tcp_metrics->current : NULL);
+    	if (!pcb) {
+    		HTTP_CLIENT_LOGF(hc, LOG_WARN, "cannot alloc PCB");
+    		http_client_retry(hc);
+            vTaskDelay(100);
+            HTTP_CLIENT_LOGF(hc, LOG_WARN, "retry %d times", 5 - count);
+    	}
+        else
+            break;
+    }
+
+if (!count) return;
+#else
+    pcb = stream_new(hc->ssl_enable ? &hc->sess_id : NULL,
+        hc->accept_non_ayla,
+        ssl_metrics ? ssl_metrics->current : NULL,
+        tcp_metrics ? tcp_metrics->current : NULL);
+    if (!pcb) {
+        HTTP_CLIENT_LOGF(hc, LOG_WARN, "cannot alloc PCB");
+        http_client_retry(hc);
+        return;
+    }
+#endif
 	hc->pcb = pcb;
 	HTTP_CLIENT_DEBUG(hc, LOG_DEBUG2, "pcb %p", pcb);
 

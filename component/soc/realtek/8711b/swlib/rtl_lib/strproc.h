@@ -99,9 +99,7 @@ static inline int isodigit(const char c)
 {
     return c >= '0' && c <= '7';
 }
-
-//add by herry
-#if 0
+#if 0//add by will
 #ifndef strtoul
 #define strtoul(str, endp, base)       simple_strtoul(str, endp, base)
 #endif
@@ -109,17 +107,36 @@ static inline int isodigit(const char c)
 #define strtol(str, endp, base)        simple_strtol(str, endp, base)
 #endif
 #else
-
-extern unsigned long my_strtoul(const char *str, char **endp, unsigned int base);
-extern long my_strtol(const char *str, char **endp, unsigned int base);
-
 #ifndef strtoul
-#define strtoul(str, endp, base)       my_strtoul(str, endp, base)
+inline unsigned long m_stroul(const char *cp, char **endp, unsigned int base)\
+{\
+    unsigned long val = simple_strtol(cp, endp, base);\
+    char *p = (char *)cp;\
+    while(*p == '\r' || *p == '\n' || *p == ' ' || *p == '-') p++;\
+    if (base == 10)\
+        while(*p >= '0' && *p <= '9') p++;\
+    else if(base == 16)\
+        while(*p >= '0' && *p <= '9' && *p >= 'a' && *p <= 'f' && 'x') p++;\
+    *endp = p;\
+    return val;\
+}
+#define strtoul(str, endp, base)       m_stroul(str, endp, base)
 #endif
 #ifndef strtol
-#define strtol(str, endp, base)        my_strtol(str, endp, base)
+inline long m_strtol(const char *cp, char **endp, unsigned int base)\
+{\
+    long val = simple_strtol(cp, endp, base);\
+    char *p = (char *)cp;\
+    while(*p == '\r' || *p == '\n' || *p == ' ' || *p == '-') p++;\
+    if (base == 10)\
+        while(*p >= '0' && *p <= '9') p++;\
+    else if(base == 16)\
+        while(*p >= '0' && *p <= '9' && *p >= 'a' && *p <= 'f' && 'x') p++;\
+    *endp = p;\
+    return val;\
+}
+#define strtol(str, endp, base)        m_strtol(str, endp, base)
 #endif
 #endif
 
 #endif
-

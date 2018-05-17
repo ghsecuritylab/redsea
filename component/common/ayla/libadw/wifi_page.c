@@ -963,6 +963,7 @@ static void adw_wifi_json_connect_post(struct server_req *req)
 	struct adw_wifi_scan_wait_connect *wswc;
 	u8 hidden = 0;
 
+	PRINTF("==adw_wifi_json_connect_post\n");	//add by herry
 
 	wifi->err_msg = wifi->err_buf;
 	client_set_setup_token("");

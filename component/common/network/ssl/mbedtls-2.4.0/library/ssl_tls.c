@@ -5288,6 +5288,7 @@ void mbedtls_ssl_session_init( mbedtls_ssl_session *session )
 
 static int ssl_handshake_init( mbedtls_ssl_context *ssl )
 {
+    PRINTF("%s, %d\n", __func__,__LINE__);    //add by herry
     /* Clear old handshake information if present */
     if( ssl->transform_negotiate )
         mbedtls_ssl_transform_free( ssl->transform_negotiate );
@@ -5403,6 +5404,7 @@ int mbedtls_ssl_setup( mbedtls_ssl_context *ssl,
 {
     int ret;
     const size_t len = MBEDTLS_SSL_BUFFER_LEN;
+PRINTF("%s, %d\n", __func__,__LINE__);    //add by herry
     ssl->conf = conf;
 
     PRINTF("\n\ravailable heap %d\n\r", xPortGetFreeHeapSize());
@@ -5416,6 +5418,7 @@ int mbedtls_ssl_setup( mbedtls_ssl_context *ssl,
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "alloc(%d bytes) failed", len ) );
         mbedtls_free( ssl->in_buf );
         ssl->in_buf = NULL;
+PRINTF("%s: %d\n", __func__,__LINE__);		//add by herry
         return( MBEDTLS_ERR_SSL_ALLOC_FAILED );
     }
 
@@ -6350,6 +6353,7 @@ int mbedtls_ssl_handshake( mbedtls_ssl_context *ssl )
         if( ret != 0 )
             break;
     }
+    PRINTF("%08x, ret:%d\n", __LINE__, ret);		//add by herry
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= handshake" ) );
 

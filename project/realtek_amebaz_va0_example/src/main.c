@@ -19,7 +19,7 @@ void main(void)
 	ReRegisterPlatformLogUart();
 
 	/* pre-processor of application example */
-	//pre_example_entry();
+	pre_example_entry();
 
 	/* wlan intialization */
 #if defined(CONFIG_WIFI_NORMAL) && defined(CONFIG_NETWORK)

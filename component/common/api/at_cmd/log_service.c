@@ -57,9 +57,12 @@ extern unsigned char inic_cmd_ioctl;
 log_init_t* __log_init_begin__;
 log_init_t* __log_init_end__;
 log_init_t log_init_table[] = {
+#if 1 // add by will
 	at_wifi_init,
+#endif
     at_ayla_cli_init,
 	//	at_fs_init,
+#if 1 // add by will
 
 	at_sys_init,
 	at_log_init,
@@ -78,6 +81,7 @@ log_init_t log_init_table[] = {
 
 #if CONFIG_ATCMD_MP
 	at_mp_init,
+#endif
 #endif
 };
 #else
@@ -198,12 +202,17 @@ void* log_handler(char *cmd)
 	param = strtok(NULL, NULL);
 #endif
 
+	PRINTF(" token %s, len %d \n\r ", token, strlen(token));	//Add by herry
+
 	if(token && (strlen(token) <= sizeof(tok)-1))
 		strcpy(tok, token);
 	else{
 		PRINTF("\n\rAT Cmd format error!\n");
 		return NULL;
 	};
+	//Add by herry
+	//PRINTF(" Command %s \n\r ", tok);
+	//PRINTF(" Param %s \n\r", param);
 	action = (log_act_t)log_action(tok);
         
 	if(action){	
@@ -436,7 +445,6 @@ void start_log_service(void)
 	if(stack_addr == NULL){
 	}
 #endif
-
 	result = xTaskGenericCreate(
 			log_service,
 			( signed portCHAR * ) "log_service",

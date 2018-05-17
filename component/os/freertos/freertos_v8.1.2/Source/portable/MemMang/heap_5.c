@@ -196,7 +196,7 @@ HeapRegion_t xHeapRegions[] =
 	{ 0, 0},	// RDP reserved, will be corrected in pvPortMalloc()
 	{ NULL, 0 } 					// Terminates the array.
 };
-#else 
+#else
 #error NOT SUPPORT CHIP
 #endif
 /* Realtek test code end */
@@ -380,12 +380,6 @@ void *pvReturn = NULL;
 		}
 	}
 	#endif
-
-	//PRINTF("\r\n[cs] alloc %d available heap %d\r\n", xWantedSize, xPortGetFreeHeapSize());		//add by herry
-	if(pvReturn == NULL){
-		// PRINTF("\r\n[cs] malloc failed! ");		//add by herry
-		// PRINTF("need %d form remain heap %d\r\n", xWantedSize, xPortGetFreeHeapSize());
-	}
 
 	return pvReturn;
 }

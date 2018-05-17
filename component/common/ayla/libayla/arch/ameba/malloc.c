@@ -20,11 +20,6 @@ void *ayla_calloc(size_t count, size_t size)
 	/* Mbedtls library need initalise the allocated memory */
 	if (ptr) {
 		memset(ptr, 0, size);
-		//PRINTF("malloc %d, remain %d\r\n", size, xPortGetFreeHeapSize());		//add by herry
-	}
-	else{
-		PRINTF("malloc %d, remain %d\r\n", size, xPortGetFreeHeapSize());
-		PRINTF("[cs] malloc failed!\r\n");		//add by herry
 	}
 
 	return ptr;

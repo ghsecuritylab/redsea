@@ -188,7 +188,7 @@ void ayla_demo_init(void)
 	int rc;
 	demo_init();
 
-#ifdef AYLA_WIFI_SUPPORT	// 1
+#ifdef AYLA_WIFI_SUPPORT
 	demo_wifi_init();
 #endif
 

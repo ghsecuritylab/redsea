@@ -14,7 +14,17 @@
 /**
  * For AT cmd Log service configurations
  */
+ #if 0 //add by will
+#define CONFIG_WITHOUT_MONITOR
+#define SUPPORT_LOG_SERVICE	0
+#else
 #define SUPPORT_LOG_SERVICE	1
+#endif
+
+#if 1 //add by will
+#define WILL_CUSTDOWN_RAM 1
+#endif
+
 #if SUPPORT_LOG_SERVICE
 #define LOG_SERVICE_BUFLEN     100 //can't larger than UART_LOG_CMD_BUFLEN(127)
 #define CONFIG_LOG_HISTORY	0
@@ -69,7 +79,8 @@
 //on/off relative commands in log service
 #define CONFIG_SSL_CLIENT	0
 #define CONFIG_WEBSERVER	0
-#define CONFIG_OTA_UPDATE	1
+
+#define CONFIG_OTA_UPDATE	0
 #define CONFIG_BSD_TCP		1//NOTE : Enable CONFIG_BSD_TCP will increase about 11KB code size
 #define CONFIG_AIRKISS		0//on or off tencent airkiss
 #define CONFIG_UART_SOCKET	0

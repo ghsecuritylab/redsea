@@ -17,9 +17,13 @@
 
 #define LOG_SERIAL			/* define to do printfs to serial */
 
+#if 0 //add by will
 #define	LOG_SIZE	2048
 #define LOG_LINE	200		/* size of log_line buf */
-
+#else
+#define	LOG_SIZE	512
+#define LOG_LINE	128		/* size of log_line buf */
+#endif
 /*
  * Log message severity prefix.
  */

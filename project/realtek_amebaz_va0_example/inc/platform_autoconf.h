@@ -105,8 +105,8 @@
 /*
  * < CONFIG I2S 
  */
-#define CONFIG_I2S_EN 1
-#define CONFIG_I2S_MODULE 1
+#define CONFIG_I2S_EN 0
+#define CONFIG_I2S_MODULE 0
 
 /*
  * < CONFIG SOC PS 
@@ -148,20 +148,20 @@
 /*
  * < CONFIG SDIO Device 
  */
-#define CONFIG_SDIO_DEVICE_EN 1     
-#define CONFIG_SDIO_DEVICE_NORMAL 1
-#define CONFIG_SDIO_DEVICE_MODULE 1
+#define CONFIG_SDIO_DEVICE_EN 0
+#define CONFIG_SDIO_DEVICE_NORMAL 0
+#define CONFIG_SDIO_DEVICE_MODULE 0
 
 /*
  * < CONFIG USB 
  */
-#define CONFIG_USB_EN 1
-#define CONFIG_USB_MODULE 1
+#define CONFIG_USB_EN 0
+#define CONFIG_USB_MODULE 0
 
 /*
  * < CONFIG RDP 
  */
-#define CONFIG_RDP_ENABLE 1
+#define CONFIG_RDP_ENABLE 0
 
 /*
  * < CONFIG PINMUX 
@@ -226,7 +226,11 @@
 /*
  * < System Debug Message Config 
  */
+#if 1//add by will
+#define CONFIG_UART_LOG_HISTORY 0
+#else
 #define CONFIG_UART_LOG_HISTORY 1
+#endif
 #define CONFIG_DEBUG_LOG 1
 #define CONFIG_DEBUG_ERR_MSG 1
 #undef  CONFIG_DEBUG_WARN_MSG

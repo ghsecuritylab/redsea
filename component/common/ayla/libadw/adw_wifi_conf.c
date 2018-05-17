@@ -1225,6 +1225,8 @@ void adw_wifi_cli(int argc, char **argv)
 		value = *argv++;
 		val = strtoul(value, &errptr, 10); /* speculative conversion */
 
+		PRINTF("[cs] val: %s, %d, %d\r\n",value, val, *errptr);	//add by herry
+
 		if (!strcmp(name, "ssid-mac") &&
 		    mfg_profile == ADW_WIFI_PROF_AP) {
 			mac = conf_sys_mac_addr;

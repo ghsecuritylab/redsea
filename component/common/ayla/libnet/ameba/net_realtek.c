@@ -30,12 +30,21 @@
 #include "client_timer.h"
 #include "client_lock.h"
 
+#if WILL_CUSTDOWN_RAM
+#define NET_UDP_MAX_SZ		768	/* max RX frame size */
+#define NET_UDP_TASK_STACKSZ	((2 * 1024) / sizeof(portSTACK_TYPE))
+#else
 #define NET_UDP_MAX_SZ		1480	/* max RX frame size */
 #define NET_UDP_TASK_STACKSZ	((3 * 1024 + 512) / sizeof(portSTACK_TYPE))
+#endif
 #define NET_UDP_TASK_PRIO	(tskIDLE_PRIORITY+1)
 #define NET_SOCK_INVALID	(-1)
 
+#if WILL_CUSTDOWN_RAM
+#define NET_TIMER_TASK_STACKSZ	((2 * 1024) / sizeof(portSTACK_TYPE))
+#else
 #define NET_TIMER_TASK_STACKSZ	((3 * 1024 + 512) / sizeof(portSTACK_TYPE))
+#endif
 #define NET_TIMER_TASK_PRIO	(tskIDLE_PRIORITY+1)
 #define NET_QUEUE_LEN		20	/* max callbacks on queue */
 

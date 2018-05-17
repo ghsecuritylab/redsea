@@ -14,9 +14,11 @@
 //UART_LOG_CMD_BUFLEN: only 126 bytes could be used for keeping input
 //                                     cmd, the last byte is for string end ('\0').
 #define UART_LOG_CMD_BUFLEN     127     
+#if 1 //add by will
+#define MAX_ARGV                5
+#else
 #define MAX_ARGV                10
-
-
+#endif
 
 typedef u32 (*ECHOFUNC)(IN u8*,...);    //UART LOG echo-function type.
 

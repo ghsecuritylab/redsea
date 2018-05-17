@@ -48,7 +48,11 @@
 #include "client_lock.h"
 #include "client_timer.h"
 
+#if WILL_CUSTDOWN_RAM
+#define CLIENT_TASK_STACKSZ	((5 * 1024 + 512) / sizeof(portSTACK_TYPE))
+#else
 #define CLIENT_TASK_STACKSZ	((7 * 1024 + 512) / sizeof(portSTACK_TYPE))
+#endif
 #define CLIENT_TASK_PRIO	(tskIDLE_PRIORITY+1)
 #define CLIENT_Q_LEN	8
 

@@ -90,7 +90,6 @@ a lot of data that needs to be copied, this should be set high. */
    timeouts. */
 #define MEMP_NUM_SYS_TIMEOUT    10
 
-
 /* ---------- Pbuf options ---------- */
 /* PBUF_POOL_SIZE: the number of buffers in the pbuf pool. */
 #if WIFI_LOGO_CERTIFICATION_CONFIG
@@ -131,7 +130,6 @@ a lot of data that needs to be copied, this should be set high. */
 
 /* TCP receive window. */
 #define TCP_WND                 (4*TCP_MSS)
-
 
 /* ---------- ICMP options ---------- */
 #define LWIP_ICMP                       1

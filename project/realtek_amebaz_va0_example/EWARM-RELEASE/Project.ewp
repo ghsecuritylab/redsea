@@ -2429,9 +2429,102 @@
     </group>
     <group>
         <name>user</name>
+        <file>
+            <name>$PROJ_DIR$\..\src\main.c</name>
+        </file>
     </group>
     <group>
         <name>utilities</name>
+        <group>
+            <name>example</name>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\bcast\example_bcast.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\coap\example_coap.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\eap\example_eap.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\example_entry.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\get_beacon_frame\example_get_beacon_frame.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\googlenest\example_google.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\high_load_memory_use\example_high_load_memory_use.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\http_client\example_http_client.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\http_download\example_http_download.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\httpc\example_httpc.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\httpd\example_httpd.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\inic_gspi\example_inic_gspi.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\mcast\example_mcast.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\mdns\example_mdns.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\nonblock_connect\example_nonblock_connect.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\rarp\example_rarp.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\sntp_showtime\example_sntp_showtime.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\socket_select\example_socket_select.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\ssl_download\example_ssl_download.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\ssl_server\example_ssl_server.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\tcp_keepalive\example_tcp_keepalive.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\uart_atcmd\example_uart_atcmd.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\uart_firmware_update\example_uart_update.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\wifi_mac_monitor\example_wifi_mac_monitor.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\wifi_roaming\example_wifi_roaming.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\wlan_fast_connect\example_wlan_fast_connect.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\wlan_scenario\example_wlan_scenario.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\websocket\example_wsclient.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\xml\example_xml.c</name>
+            </file>
+        </group>
         <group>
             <name>wigadget</name>
             <file>
