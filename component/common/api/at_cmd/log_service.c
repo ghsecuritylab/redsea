@@ -36,7 +36,7 @@ char log_buf[LOG_SERVICE_BUFLEN];
 char log_history[LOG_HISTORY_LEN][LOG_SERVICE_BUFLEN];
 static unsigned int log_history_count = 0;
 #endif
-xSemaphoreHandle log_rx_interrupt_sema = NULL;
+//xSemaphoreHandle log_rx_interrupt_sema = NULL;
 #if CONFIG_LOG_SERVICE_LOCK
 xSemaphoreHandle log_service_sema = NULL; 
 #endif
@@ -141,8 +141,8 @@ void log_service_init(void)
 		log_init_table[i]();
 
   	/* Initial uart rx swmaphore*/
-	vSemaphoreCreateBinary(log_rx_interrupt_sema);
-	xSemaphoreTake(log_rx_interrupt_sema, 1/portTICK_RATE_MS);
+	//vSemaphoreCreateBinary(log_rx_interrupt_sema);
+	//xSemaphoreTake(log_rx_interrupt_sema, 1/portTICK_RATE_MS);
 #if CONFIG_LOG_SERVICE_LOCK
 	log_service_lock_init();
 #endif

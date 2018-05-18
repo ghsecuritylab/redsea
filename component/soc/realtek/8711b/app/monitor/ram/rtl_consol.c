@@ -29,8 +29,8 @@ extern u8  UartLogHistoryBuf[UART_LOG_HISTORY_LEN][UART_LOG_CMD_BUFLEN];
 #endif
 
 #ifdef CONFIG_KERNEL
-u32		Consol_TaskRdy;
-_sema	Consol_Sema;
+//u32		Consol_TaskRdy;
+//_sema	Consol_Sema;
 #else
 // Since ROM code will reference this typedef, so keep the typedef same size
 u32		Consol_TaskRdy;
@@ -127,7 +127,7 @@ UartLogIrqHandleRam
             //4 the input commands are valid only when the task is ready to execute commands
             if ((pUartLogCtl->BootRdy == 1)  
 #ifdef CONFIG_KERNEL 
-                ||(Consol_TaskRdy == 1)
+//                ||(Consol_TaskRdy == 1)
 #endif          
             )
             {
@@ -168,8 +168,10 @@ UartLogIrqHandleRam
                 {
                     pUartLogCtl->ExecuteCmd = _TRUE;
 #if defined(CONFIG_KERNEL) && !TASK_SCHEDULER_DISABLED
-    				if (Consol_TaskRdy)
-    					rtw_up_sema_from_isr((_sema *)&Consol_Sema);
+//    				if (Consol_TaskRdy)
+                        //rtw_up_sema_from_isr((_sema *)&Consol_Sema);
+                        void will_dynamic_task_start(void);
+                        will_dynamic_task_start();	
 #endif
                 }
                 else
@@ -182,8 +184,6 @@ UartLogIrqHandleRam
     DiagSetIsrEnReg(IrqEn);
 
 }
-
-
 
 VOID
 RtlConsolInitRam(
@@ -212,7 +212,7 @@ RtlConsolInitRam(
     pUartLogCtl->pCmdTbl = (PCOMMAND_TABLE) pTBL;
     pUartLogCtl->CmdTblSz = TBLSz;
 #ifdef CONFIG_KERNEL    
-    Consol_TaskRdy = 0;
+//    Consol_TaskRdy = 0;
 #endif
     //executing boot sequence
     if (Boot == ROM_STAGE)
@@ -226,8 +226,8 @@ RtlConsolInitRam(
         pUartLogCtl->ExecuteEsc= _TRUE;//don't check Esc anymore
 #if defined(CONFIG_KERNEL)
         /* Create a Semaphone */
-        rtw_init_sema((_sema*)&(Consol_Sema), 0);
-        Consol_TaskRdy = 0;
+        //rtw_init_sema((_sema*)&(Consol_Sema), 0);
+//        Consol_TaskRdy = 0;
 
         stack_size = 512 + 256 + 128;
 #if defined (__GNUC__) /* for Verification need more stack */
@@ -235,10 +235,11 @@ RtlConsolInitRam(
 #endif
 
 #ifdef PLATFORM_FREERTOS
-        if (pdTRUE != xTaskCreate( RtlConsolTaskRam, (const char * const)"LOGUART_TASK", stack_size, NULL, tskIDLE_PRIORITY + 5 , NULL))
-        {
-            DiagPrintf("Create Log UART Task Err!!\n");
-        }
+        //if (pdTRUE != xTaskCreate( RtlConsolTaskRam, (const char * const)"LOGUART_TASK", stack_size, NULL, tskIDLE_PRIORITY + 5 , NULL))
+        //{
+        //    DiagPrintf("Create Log UART Task Err!!\n");
+        //}
+        RtlConsolTaskRam(NULL);
 #endif
 #endif    
     }	
@@ -304,6 +305,69 @@ UartLogCmdExecuteRam(
 	return FALSE;
 }
 
+char task_flag=0;
+void will_dynamic_task_start(void)
+{
+    if (!task_flag)
+    {
+        task_flag = 1;
+        void will_dynamic_task(void *param);
+        if (pdTRUE != xTaskCreate( will_dynamic_task, (const char * const)"LOGUART_TASK", 1024, NULL, tskIDLE_PRIORITY + 5 , NULL))
+        {
+            DiagPrintf("Create Log UART Task Err!!\n");
+        }
+    }
+    else
+    {
+        printf("Warring: command too fast\r\n");
+    }
+}
+
+void will_dynamic_task(void *param)
+{
+	u32 ret = TRUE;
+
+    if (pUartLogCtl->ExecuteCmd) {
+        u8  argc = 0;
+        u8  **argv;
+        PUART_LOG_BUF   pUartLogBuf = pUartLogCtl->pTmpLogBuf;
+#if defined(CONFIG_WIFI_NORMAL)
+#if SUPPORT_LOG_SERVICE
+        _strncpy(log_buf, (const u8*)&(*pUartLogBuf).UARTLogBuf[0], LOG_SERVICE_BUFLEN-1);
+#endif
+#endif
+        argc = GetArgc((const u8*)&((*pUartLogBuf).UARTLogBuf[0]));
+        argv = GetArgv((const u8*)&((*pUartLogBuf).UARTLogBuf[0])); /* UARTLogBuf will be changed */
+
+        if (argc > 0) {
+            /* FPGA Verification */
+            ret = UartLogCmdExecuteRam(argc, argv);
+
+            /* normal for LOG service */
+            if (ret == FALSE) {
+                ret = console_cmd_exec(argc, argv);
+            }
+
+            (*pUartLogBuf).BufCount = 0;
+            ArrayInitialize(&(*pUartLogBuf).UARTLogBuf[0], UART_LOG_CMD_BUFLEN, '\0');
+        } else {
+            /*In some exception case, even if argc parsed is 0(when the first character value in log buffer is '\0'), 
+            log buffer may not be empty and log buffer counter may not be zero. If not clean log buffer and counter
+            , some error will happen. Therefore, clean log buffer and initialize buffer counter when it occurs.*/
+            if((*pUartLogBuf).BufCount != 0) {
+                (*pUartLogBuf).BufCount = 0;
+                ArrayInitialize(&(*pUartLogBuf).UARTLogBuf[0], UART_LOG_CMD_BUFLEN, '\0');
+            }
+            CONSOLE_AMEBA();
+        }
+        pUartLogCtl->ExecuteCmd = _FALSE;
+
+        pmu_set_sysactive_time(1000);
+    }
+
+    task_flag = 0;
+    vTaskDelete(NULL);
+}
 
 VOID
 RtlConsolTaskRam(
@@ -320,53 +384,11 @@ RtlConsolTaskRam(
 
 	//4 Set this for UartLog check cmd history
 #ifdef CONFIG_KERNEL
-	Consol_TaskRdy = 1;
+//	Consol_TaskRdy = 1;
 #endif
 #ifndef CONFIG_KERNEL   
 	pUartLogCtl->BootRdy = 1;
 #endif
-	do{
-#if defined(CONFIG_KERNEL) && !TASK_SCHEDULER_DISABLED
-		rtw_down_sema((_sema *)&Consol_Sema);
-#endif
-		if (pUartLogCtl->ExecuteCmd) {
-			u8  argc = 0;
-			u8  **argv;
-			PUART_LOG_BUF   pUartLogBuf = pUartLogCtl->pTmpLogBuf;
-#if defined(CONFIG_WIFI_NORMAL)
-#if SUPPORT_LOG_SERVICE
-			_strncpy(log_buf, (const u8*)&(*pUartLogBuf).UARTLogBuf[0], LOG_SERVICE_BUFLEN-1);
-#endif
-#endif
-			argc = GetArgc((const u8*)&((*pUartLogBuf).UARTLogBuf[0]));
-			argv = GetArgv((const u8*)&((*pUartLogBuf).UARTLogBuf[0])); /* UARTLogBuf will be changed */
-
-			if (argc > 0) {
-				/* FPGA Verification */
-				ret = UartLogCmdExecuteRam(argc, argv);
-
-				/* normal for LOG service */
-				if (ret == FALSE) {
-					ret = console_cmd_exec(argc, argv);
-				}
-
-				(*pUartLogBuf).BufCount = 0;
-				ArrayInitialize(&(*pUartLogBuf).UARTLogBuf[0], UART_LOG_CMD_BUFLEN, '\0');
-			} else {
-				/*In some exception case, even if argc parsed is 0(when the first character value in log buffer is '\0'), 
-				log buffer may not be empty and log buffer counter may not be zero. If not clean log buffer and counter
-				, some error will happen. Therefore, clean log buffer and initialize buffer counter when it occurs.*/
-				if((*pUartLogBuf).BufCount != 0) {
-					(*pUartLogBuf).BufCount = 0;
-					ArrayInitialize(&(*pUartLogBuf).UARTLogBuf[0], UART_LOG_CMD_BUFLEN, '\0');
-				}
-				CONSOLE_AMEBA();
-			}
-			pUartLogCtl->ExecuteCmd = _FALSE;
-
-			pmu_set_sysactive_time(10000);
-		}
-	}while(1);
 }
 
 

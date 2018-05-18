@@ -1271,25 +1271,6 @@ static void http_client_connect(struct http_client *hc)
 
 	http_client_init_ssltcp_metric(hc);
 
-#if 1//add by will
-    int count=2;
-    while(count--)
-    {
-    	pcb = stream_new(hc->ssl_enable ? &hc->sess_id : NULL,
-    	    hc->accept_non_ayla,
-    	    ssl_metrics ? ssl_metrics->current : NULL,
-    	    tcp_metrics ? tcp_metrics->current : NULL);
-    	if (!pcb) {
-    		HTTP_CLIENT_LOGF(hc, LOG_WARN, "cannot alloc PCB");
-    		http_client_retry(hc);
-            vTaskDelay(10);
-    	}
-        else
-            break;
-    }
-
-if (!count) return;
-#else
     pcb = stream_new(hc->ssl_enable ? &hc->sess_id : NULL,
         hc->accept_non_ayla,
         ssl_metrics ? ssl_metrics->current : NULL,
@@ -1299,7 +1280,7 @@ if (!count) return;
         http_client_retry(hc);
         return;
     }
-#endif
+
 	hc->pcb = pcb;
 	HTTP_CLIENT_DEBUG(hc, LOG_DEBUG2, "pcb %p", pcb);
 
