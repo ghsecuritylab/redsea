@@ -68,7 +68,7 @@ void init_thread(void *param)
 	printf("\n");
 	ayla_demo_init();
 
-	printf("\n\r===============================================> %s(%d), Available heap 0x%x\r\n", __FUNCTION__, __LINE__, xPortGetFreeHeapSize());	
+	printf("\n\r%s(%d), Available heap 0x%x\r\n", __FUNCTION__, __LINE__, xPortGetFreeHeapSize());	
 
 	/* Kill init thread after all init tasks done */
 	vTaskDelete(NULL);

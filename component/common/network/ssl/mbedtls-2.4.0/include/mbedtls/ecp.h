@@ -200,7 +200,7 @@ mbedtls_ecp_keypair;
  *      224       475     475     453     398     342
  *      192       640     640     633     587     476
  */
-#define MBEDTLS_ECP_WINDOW_SIZE    6   /**< Maximum window size used */
+#define MBEDTLS_ECP_WINDOW_SIZE    2   /**< Maximum window size used */
 #endif /* MBEDTLS_ECP_WINDOW_SIZE */
 
 #if !defined(MBEDTLS_ECP_FIXED_POINT_OPTIM)

@@ -62,7 +62,7 @@
  *
  * Reduction in size, reduces speed.
  */
-#define MBEDTLS_MPI_WINDOW_SIZE                           6        /**< Maximum windows size used. */
+#define MBEDTLS_MPI_WINDOW_SIZE                           1        /**< Maximum windows size used. */
 #endif /* !MBEDTLS_MPI_WINDOW_SIZE */
 
 #if !defined(MBEDTLS_MPI_MAX_SIZE)
@@ -73,7 +73,7 @@
  * Note: Calculations can results temporarily in larger MPIs. So the number
  * of limbs required (MBEDTLS_MPI_MAX_LIMBS) is higher.
  */
-#define MBEDTLS_MPI_MAX_SIZE                              1024     /**< Maximum number of bytes for usable MPIs. */
+#define MBEDTLS_MPI_MAX_SIZE                              512     /**< Maximum number of bytes for usable MPIs. */
 #endif /* !MBEDTLS_MPI_MAX_SIZE */
 
 #define MBEDTLS_MPI_MAX_BITS                              ( 8 * MBEDTLS_MPI_MAX_SIZE )    /**< Maximum number of bits for usable MPIs. */
